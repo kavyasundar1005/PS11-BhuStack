@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public read for municipal cadastral property database
+    // Writes permitted for syncing and updating property registry records
+    match /buildings/{buildingId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /units/{unitId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    // Test collection for initial health check
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #faf8f5;
+    color: #2c2825;
+  }
+
+  code, kbd, samp, pre {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+}
+
+/* Cesium specific overrides for clean municipal look */
+.cesium-viewer {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.cesium-viewer-bottom {
+  display: block !important;
+}
+
+.cesium-widget-credits {
+  font-size: 11px !important;
+  color: #5c554e !important;
+  background: rgba(250, 248, 245, 0.9) !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1ede6;
+}
+::-webkit-scrollbar-thumb {
+  background: #d4ccbf;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b5aba0;
+}

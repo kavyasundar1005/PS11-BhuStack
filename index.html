@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GeoParcel 3D - Municipal 3D Property & ULPIN Registry</title>
+    <meta name="description" content="Global 3D property mapping registry powered by Cesium OSM Buildings, featuring floor-by-floor unit subdivision, ULPIN identifiers, air rights, parking allotments, and spatial violation audits." />
+    <meta property="og:title" content="GeoParcel 3D - Municipal 3D Property & ULPIN Registry" />
+    <meta property="og:description" content="Global 3D property mapping registry powered by Cesium OSM Buildings, featuring floor-by-floor unit subdivision, ULPIN identifiers, air rights, parking allotments, and spatial violation audits." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- CesiumJS CSS -->
+    <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.121/Build/Cesium/Widgets/widgets.css" />
+    <script>
+      window.CESIUM_BASE_URL = 'https://cesium.com/downloads/cesiumjs/releases/1.121/Build/Cesium/';
+    </script>
+    <!-- CesiumJS runtime -->
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.121/Build/Cesium/Cesium.js"></script>
+  </head>
+  <body class="bg-[#faf8f5] text-[#2c2825] font-sans antialiased overflow-x-hidden">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

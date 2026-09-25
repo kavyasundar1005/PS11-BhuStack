@@ -1,0 +1,61 @@
+{
+  "entities": {
+    "Building": {
+      "title": "Building",
+      "description": "Registered 3D building property with base parcel ULPIN and spatial metadata",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique building identifier" },
+        "name": { "type": "string", "description": "Building name" },
+        "area": { "type": "string", "description": "Neighborhood or zone name" },
+        "lat": { "type": "number", "description": "Latitude coordinate" },
+        "lng": { "type": "number", "description": "Longitude coordinate" },
+        "baseUlpin": { "type": "string", "description": "Unique Land Parcel Identification Number of base plot" },
+        "height": { "type": "number", "description": "Actual physical height in meters" },
+        "floorsCount": { "type": "number", "description": "Total number of above-ground floors" },
+        "floorHeight": { "type": "number", "description": "Floor height in meters (default 3m)" },
+        "footprintStatus": { "type": "string", "enum": ["matches", "encroachment"], "description": "Footprint alignment status against plot boundary" },
+        "encroachmentMeters": { "type": "number", "description": "Protrusion beyond registered property line in meters" },
+        "encroachedSide": { "type": "string", "description": "Orientation/side of the protruding encroachment section" },
+        "approvedSanctionedHeight": { "type": "number", "description": "Approved height on municipal sanction record in meters" },
+        "parkingType": { "type": "string", "description": "Parking configuration (basement or surface lot)" },
+        "parkingSlotsTotal": { "type": "number", "description": "Total number of allocated parking bays" },
+        "parkingSlotsDescription": { "type": "string", "description": "Human-readable summary of parking slots" },
+        "hasBasement": { "type": "boolean", "description": "Whether the property includes a basement level" },
+        "unitsTotal": { "type": "number", "description": "Total residential/commercial units count" }
+      },
+      "required": ["id", "name", "baseUlpin", "height", "floorsCount"]
+    },
+    "Unit": {
+      "title": "Unit",
+      "description": "Floor-level flat unit with 3D volumetric ULPIN and rights record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique unit identifier or ULPIN" },
+        "buildingId": { "type": "string", "description": "Reference to parent Building entity" },
+        "floorNumber": { "type": "number", "description": "Numeric floor level" },
+        "floorLabel": { "type": "string", "description": "Floor label e.g. G, 1, 2, B" },
+        "flatLabel": { "type": "string", "description": "Flat wing identifier (Flat A, Flat B)" },
+        "unitNumber": { "type": "string", "description": "Unit door number" },
+        "ulpin": { "type": "string", "description": "Standardized 3D ULPIN code e.g. 14A7B9C23D45E1-V-F04-U402" },
+        "areaSqFt": { "type": "number", "description": "Built-up carpet area in square feet" },
+        "airRightsStatus": { "type": "string", "enum": ["Unutilized", "Transferred"], "description": "Vertical air development rights status" },
+        "parkingSlot": { "type": "string", "description": "Assigned slot identifier or None Allotted" },
+        "parkingAllocated": { "type": "boolean", "description": "Whether parking slot is assigned" },
+        "encumbranceStatus": { "type": "string", "enum": ["Unencumbered", "Mortgaged"], "description": "Title encumbrance registration status" },
+        "createdAt": { "type": "string", "description": "Timestamp ISO string" }
+      },
+      "required": ["id", "buildingId", "floorNumber", "flatLabel", "ulpin"]
+    }
+  },
+  "firestore": {
+    "/buildings/{buildingId}": {
+      "schema": "Building",
+      "description": "Collection of municipal detailed building property records"
+    },
+    "/units/{unitId}": {
+      "schema": "Unit",
+      "description": "Collection of individual unit volumetric property title records"
+    }
+  }
+}

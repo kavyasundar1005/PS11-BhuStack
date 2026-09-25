@@ -1,0 +1,6 @@
+{
+  "name": "GeoParcel 3D - Municipal 3D Property & ULPIN Registry",
+  "description": "Global 3D property mapping registry powered by Cesium OSM Buildings, featuring floor-by-floor unit subdivision, ULPIN identifiers, air rights, parking allotments, and spatial violation audits.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
