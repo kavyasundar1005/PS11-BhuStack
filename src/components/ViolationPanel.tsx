@@ -41,7 +41,7 @@ export const ViolationPanel: React.FC<ViolationPanelProps> = ({
             </div>
             <div>
               <h2 className="font-semibold text-base text-[#2c2825]">
-                Cadastral Violation & Compliance Audit
+                Property Violation & Compliance Audit
               </h2>
               <p className="text-xs text-[#6b6257]">
                 {building.name} • Base ULPIN: <span className="font-mono font-medium">{building.baseUlpin}</span>
@@ -140,7 +140,7 @@ export const ViolationPanel: React.FC<ViolationPanelProps> = ({
               <div className="flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-[#7a6f64]" />
                 <h3 className="font-semibold text-sm text-[#2c2825]">
-                  Check B: Cadastral Footprint & Boundary Alignment
+                  Check B: Footprint & Boundary Alignment
                 </h3>
               </div>
               <span className="text-[11px] font-mono text-[#6b6257]">
@@ -178,7 +178,7 @@ export const ViolationPanel: React.FC<ViolationPanelProps> = ({
                     </span>
                   ) : (
                     <span>
-                      Physical building footprint conforms strictly to registered cadastral boundaries. Zero spatial deviation observed.
+                      Physical building footprint conforms strictly to registered property boundaries. Zero spatial deviation observed.
                     </span>
                   )}
                 </div>

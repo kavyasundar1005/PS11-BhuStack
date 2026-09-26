@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DETAILED_BUILDINGS } from './data/buildingsData';
 import { DetailedBuilding } from './types/property';
 import { Header } from './components/Header';
-import { CesiumMap } from './components/CesiumMap';
+import { LeafletMap } from './components/LeafletMap';
 import { BuildingDetailPage } from './components/BuildingDetailPage';
 import { ReadOnlyCard } from './components/ReadOnlyCard';
 import { seedFirestoreIfEmpty } from './services/firebase';
@@ -95,7 +95,7 @@ export default function App() {
       {/* Main View Switcher */}
       <main className="flex-1">
         {currentView === 'map' && (
-          <CesiumMap
+          <LeafletMap
             onSelectBuilding={handleSelectBuilding}
             flyToBuildingId={flyToBuildingId}
           />

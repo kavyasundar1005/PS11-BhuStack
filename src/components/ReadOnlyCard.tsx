@@ -108,7 +108,7 @@ export const ReadOnlyCard: React.FC<ReadOnlyCardProps> = ({
           Property Title Record Not Found
         </h3>
         <p className="text-xs text-[#7a6f64]">
-          Could not locate a certified cadastral record matching ULPIN{' '}
+          Could not locate a certified property record matching ULPIN{' '}
           <code className="bg-[#f4f1ea] px-1 py-0.5 rounded font-mono text-[#2c2825]">
             {ulpin}
           </code>
@@ -147,7 +147,7 @@ export const ReadOnlyCard: React.FC<ReadOnlyCardProps> = ({
             onClick={onNavigateHome}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#3d8b57] hover:bg-[#327247] text-[#ffffff] text-xs font-medium shadow-2xs transition-colors cursor-pointer"
           >
-            <span>Cesium Map</span>
+            <span>Property Map</span>
           </button>
         </div>
       </div>
@@ -168,7 +168,7 @@ export const ReadOnlyCard: React.FC<ReadOnlyCardProps> = ({
               </div>
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-widest text-[#7a6f64] block">
-                  Municipal Cadastral Registry
+                  Municipal Property Registry
                 </span>
                 <h2 className="text-lg font-bold text-[#2c2825] tracking-tight">
                   Volumetric 3D Property Title Card
@@ -196,7 +196,7 @@ export const ReadOnlyCard: React.FC<ReadOnlyCardProps> = ({
           </div>
 
           <p className="text-xs text-[#7a6f64] leading-relaxed">
-            Public municipal record issued under 3D spatial cadastral survey specifications with vertical strata subdivision and base land parcel linkage.
+            Public municipal record issued under 3D spatial property survey specifications with vertical strata subdivision and base land parcel linkage.
           </p>
         </div>
 
@@ -293,7 +293,7 @@ export const ReadOnlyCard: React.FC<ReadOnlyCardProps> = ({
             {/* Timestamp */}
             <div className="flex items-center justify-between py-2">
               <span className="text-[#7a6f64] font-medium flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-[#7a6f64]" /> Cadastral Timestamp
+                <Calendar className="w-3.5 h-3.5 text-[#7a6f64]" /> Registration Timestamp
               </span>
               <span className="text-[#6b6257] font-mono text-[11px]">
                 {new Date().toLocaleDateString('en-IN', {
@@ -333,7 +333,7 @@ export const ReadOnlyCard: React.FC<ReadOnlyCardProps> = ({
 
         {/* Footer Seal */}
         <div className="pt-4 border-t border-[#f1ede6] flex items-center justify-between text-[11px] text-[#7a6f64] flex-wrap gap-2">
-          <span>Official Cadastral Strata Record • State Cadastre & Land Records</span>
+          <span>Official Property Strata Record • State Land Records</span>
           <span className="font-mono text-[10px]">VERIFIED_SECURE_TOKEN</span>
         </div>
       </div>

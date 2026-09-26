@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onNavigateHome}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e2dcce] bg-[#f9f7f2] hover:bg-[#efece4] text-xs font-medium text-[#4a443d] transition-colors cursor-pointer"
-              title="Return to Cesium Global Map"
+              title="Return to Global Map"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Map View</span>
@@ -46,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
                 GeoParcel 3D
               </h1>
               <span className="text-[10px] uppercase font-semibold tracking-wider px-1.5 py-0.5 rounded-sm bg-[#efece4] text-[#6b6257] border border-[#e2dcce]">
-                Cadastral ULPIN
+                Property ULPIN
               </span>
             </div>
 
@@ -66,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             ) : (
               <p className="text-[11px] text-[#7a6f64] hidden sm:block">
-                Cesium OSM Global 3D Cadastral & Volumetric Registry
+                Global Property & Volumetric 3D Strata Registry
               </p>
             )}
           </div>

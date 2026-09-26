@@ -84,7 +84,7 @@ export const BuildingDetailPage: React.FC<BuildingDetailPageProps> = ({
             <button
               onClick={onNavigateHome}
               className="p-2 rounded-xl border border-[#e2dcce] bg-[#f9f7f2] hover:bg-[#efece4] text-[#4a443d] transition-colors cursor-pointer"
-              title="Back to Cesium Map"
+              title="Back to Global Map"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>

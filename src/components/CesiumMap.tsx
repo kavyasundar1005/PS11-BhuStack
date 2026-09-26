@@ -97,12 +97,14 @@ export const CesiumMap: React.FC<CesiumMapProps> = ({
           },
         });
 
-        // 3. Load Real Global Cesium OSM Buildings layer
+        // 3. Load Real Global Cesium OSM Buildings layer if token is provided
         try {
-          const osmBuildingsTileset = await Cesium.createOsmBuildingsAsync();
-          if (!isCancelled) {
-            viewer.scene.primitives.add(osmBuildingsTileset);
-            osmTilesetRef.current = osmBuildingsTileset;
+          if (token) {
+            const osmBuildingsTileset = await Cesium.createOsmBuildingsAsync();
+            if (!isCancelled) {
+              viewer.scene.primitives.add(osmBuildingsTileset);
+              osmTilesetRef.current = osmBuildingsTileset;
+            }
           }
         } catch (tilesetErr) {
           console.warn('[Cesium] OSM Buildings load note:', tilesetErr);
@@ -401,16 +403,6 @@ export const CesiumMap: React.FC<CesiumMapProps> = ({
     <div className="relative w-full h-[calc(100vh-62px)] bg-[#faf8f5] overflow-hidden">
       {/* Cesium 3D Canvas Container */}
       <div id="cesiumContainer" ref={mapContainerRef} className="w-full h-full" />
-
-      {/* Missing Token Notice Pill (Friendly, non-intrusive) */}
-      {tokenStatus === 'missing' && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-[#ffffff]/95 backdrop-blur-md border border-[#e8e2d8] px-4 py-2 rounded-xl shadow-md text-xs text-[#5c554e] flex items-center gap-2 max-w-lg">
-          <AlertCircle className="w-4 h-4 text-[#d97706] shrink-0" />
-          <span>
-            Streaming Cesium OSM 3D layer. To enable full Cesium Ion premium building tiles, set <code className="bg-[#f4f1ea] px-1 rounded font-mono text-[#2c2825]">CESIUM_ION_TOKEN</code> in your environment.
-          </span>
-        </div>
-      )}
 
       {/* Global Location Search & Quick Jump Bar */}
       <div className="absolute top-4 left-4 z-20 flex flex-col gap-2 max-w-sm w-full">

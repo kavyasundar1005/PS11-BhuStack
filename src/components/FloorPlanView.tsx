@@ -45,7 +45,7 @@ export const FloorPlanView: React.FC<FloorPlanViewProps> = ({
         <div className="flex items-center gap-2">
           <Layers className="w-4 h-4 text-[#3d8b57]" />
           <h3 className="font-semibold text-sm text-[#2c2825]">
-            Floor Cadastral Subdivision
+            Floor Architectural Subdivision
           </h3>
           <span className="text-xs text-[#7a6f64]">
             (Height: {selectedFloor > 0 ? (selectedFloor * 3) : 0}m elevation)
@@ -98,7 +98,7 @@ export const FloorPlanView: React.FC<FloorPlanViewProps> = ({
         <div className="space-y-2">
           <div className="text-[11px] font-medium text-[#7a6f64] flex items-center justify-between">
             <span>West Wing</span>
-            <span>Cadastral Corridor Strip</span>
+            <span>Corridor Strip</span>
             <span>East Wing</span>
           </div>
 

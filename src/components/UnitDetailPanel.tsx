@@ -57,7 +57,7 @@ export const UnitDetailPanel: React.FC<UnitDetailPanelProps> = ({
             Select a Unit to Inspect
           </h4>
           <p className="text-xs text-[#7a6f64] max-w-xs mx-auto">
-            Click on <strong>Flat A</strong> or <strong>Flat B</strong> in the 3D model or architectural floor plan below to inspect cadastral title, volumetric ULPIN, and parking.
+            Click on <strong>Flat A</strong> or <strong>Flat B</strong> in the 3D model or architectural floor plan below to inspect property title, volumetric ULPIN, and parking.
           </p>
         </div>
       </div>
