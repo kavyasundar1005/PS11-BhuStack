@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoParcel 3D - Video Pitch Demo (3-Step Walkthrough)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #faf8f5;
+      color: #2c2825;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .scanner-active {
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.9; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+    .pulse-danger {
+      animation: pulseGlow 1.5s infinite ease-in-out;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1ede6;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d4ccbf;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-[#faf8f5] text-[#2c2825] flex flex-col h-screen select-none">
+
+  <!-- STANDALONE HEADER -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-[#e8e2d8] px-6 py-3.5 flex items-center justify-between gap-4 z-40 shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#166534] to-[#3d8b57] text-white flex items-center justify-center font-extrabold shadow-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-extrabold text-base tracking-tight text-[#1c1917]">
+            GeoParcel 3D • Video Pitch Demonstration
+          </h1>
+          <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#f0fdf4] text-[#166534] border border-[#bbf7d0]">
+            Standalone Demo
+          </span>
+        </div>
+        <p class="text-xs text-[#78716c]">
+          3-Step Core Concept: 3D Re-construction → Automated Approval Audit → Running Historical Memory
+        </p>
+      </div>
+    </div>
+
+    <!-- Step Controls & Auto-Play -->
+    <div class="flex items-center gap-3">
+      <!-- 3 Step Tabs -->
+      <div class="flex items-center bg-[#f5f2eb] p-1 rounded-xl border border-[#e2dcce]">
+        <button id="step-btn-1" onclick="setStep(1)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#166534] shadow-xs">
+          <span class="w-4 h-4 rounded-full bg-[#166534] text-white text-[10px] flex items-center justify-center font-bold">1</span>
+          <span>1. Simple 3D Model</span>
+        </button>
+        <button id="step-btn-2" onclick="setStep(2)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]">
+          <span class="w-4 h-4 rounded-full bg-[#991b1b] text-white text-[10px] flex items-center justify-center font-bold">2</span>
+          <span>2. Check Approvals</span>
+        </button>
+        <button id="step-btn-3" onclick="setStep(3)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]">
+          <span class="w-4 h-4 rounded-full bg-[#4338ca] text-white text-[10px] flex items-center justify-center font-bold">3</span>
+          <span>3. Running History</span>
+        </button>
+      </div>
+
+      <!-- Auto Play Mode -->
+      <button id="autoplay-btn" onclick="toggleAutoPlay()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700 shadow-sm">
+        <svg id="play-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span id="play-text">Auto-Play Video Demo</span>
+      </button>
+
+      <a href="http://localhost:3000/" target="_blank" class="text-xs px-3 py-1.5 rounded-xl border border-[#ded8cb] bg-[#f9f7f2] hover:bg-[#efece4] text-[#4a443d] font-semibold transition-colors flex items-center gap-1">
+        <span>Open Main App ↗</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN DEMO VIEWPORT -->
+  <main class="flex-1 flex overflow-hidden relative">
+    
+    <!-- LEFT: 3D THREE.JS CANVAS -->
+    <div class="flex-1 flex flex-col relative bg-gradient-to-b from-[#faf8f5] to-[#f0eae1] overflow-hidden">
+      <!-- Three.js Container -->
+      <div id="three-container" class="w-full flex-1 cursor-grab active:cursor-grabbing"></div>
+
+      <!-- 3D Legend & Hints Overlay -->
+      <div class="absolute top-4 left-4 z-20 flex flex-col gap-2 pointer-events-none">
+        <div class="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#e5dfd3] shadow-xs text-xs pointer-events-auto flex items-center gap-3">
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-sm bg-emerald-600 inline-block border border-emerald-700"></span>
+            <span class="font-semibold text-[#3d3832]">Sanctioned (10 Floors / 30m)</span>
+          </div>
+          <div id="legend-violation" class="hidden flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-sm bg-rose-600 inline-block border border-rose-700"></span>
+            <span class="font-bold text-rose-700">Unapproved Floors 11 & 12 (+6m)</span>
+          </div>
+        </div>
+
+        <div class="bg-white/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#e5dfd3] shadow-xs text-[11px] text-[#78716c] pointer-events-auto">
+          💡 Click and drag with mouse to orbit around the 3D model
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: STEP DETAILS & ACTIONS PANEL -->
+    <div class="w-[440px] bg-white border-l border-[#e8e2d8] flex flex-col justify-between overflow-y-auto shrink-0 shadow-xs z-30">
+      
+      <!-- STEP 1 CONTENT -->
+      <div id="step-panel-1" class="p-6 space-y-5">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+              Step 1: 3D Reconstruction
+            </span>
+            <span class="text-xs font-semibold text-[#8c8275]">From Floor Plan</span>
+          </div>
+          <h3 class="text-lg font-extrabold text-[#1c1917]">Sanctioned Plan Ingestion</h3>
+          <p class="text-xs text-[#6e665d] leading-relaxed">
+            Municipal authorities already possess sanctioned architectural blueprints. GeoParcel ingests the floor plan and automatically generates an accurate 3D volumetric model.
+          </p>
+        </div>
+
+        <!-- Architectural Blueprint Dossier -->
+        <div class="border border-[#e2dcce] rounded-xl p-4 bg-[#faf8f5] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#4a443d] flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Sanctioned Plan #CMDA-2021-084
+            </span>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded border border-emerald-200">
+              APPROVED
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
+              <span class="text-[#8c8275] block text-[10px]">Sanctioned Height</span>
+              <strong class="text-sm text-[#2c2825]">30.0 Meters</strong>
+            </div>
+            <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
+              <span class="text-[#8c8275] block text-[10px]">Approved Floors</span>
+              <strong class="text-sm text-[#2c2825]">10 Floors (G + 9)</strong>
+            </div>
+            <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
+              <span class="text-[#8c8275] block text-[10px]">Base Cadastral ULPIN</span>
+              <strong class="text-xs font-mono text-[#2c2825]">14A7B9C23D45E1</strong>
+            </div>
+            <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
+              <span class="text-[#8c8275] block text-[10px]">Parking Allocation</span>
+              <strong class="text-xs text-[#2c2825]">Basement (Allotted)</strong>
+            </div>
+          </div>
+
+          <!-- Animated Extrusion Counter -->
+          <div class="p-3 bg-white rounded-lg border border-[#e8e2d8] space-y-2">
+            <div class="flex justify-between text-xs font-semibold">
+              <span class="text-[#4a443d]">3D Volumetric Extrusion:</span>
+              <span id="extrusion-counter" class="text-emerald-700 font-bold">10 of 10 Floors Extruded</span>
+            </div>
+            <div class="w-full bg-[#f0ede6] h-2 rounded-full overflow-hidden">
+              <div id="extrusion-bar" class="bg-emerald-600 h-full transition-all duration-300 rounded-full" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <button onclick="replayExtrusion()" class="w-full py-2 px-3 rounded-lg border border-[#d8d2c4] hover:bg-[#efece4] text-xs font-semibold text-[#4a443d] flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            Replay 3D Extrusion
+          </button>
+        </div>
+
+        <div class="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-1.5 text-xs">
+          <div class="flex items-center gap-1.5 text-emerald-900 font-bold">
+            <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            Zero Manual 3D Work Required
+          </div>
+          <p class="text-emerald-950 leading-relaxed text-[11px]">
+            By directly pulling floor counts, setback boundaries, and floor heights from existing sanctioned municipal files, an accurate 3D digital twin is constructed instantly.
+          </p>
+        </div>
+      </div>
+
+      <!-- STEP 2 CONTENT -->
+      <div id="step-panel-2" class="hidden p-6 space-y-5">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">
+              Step 2: Automated Audit
+            </span>
+            <span class="text-xs font-semibold text-[#8c8275]">Approval Verification</span>
+          </div>
+          <h3 class="text-lg font-extrabold text-[#1c1917]">Automated Discrepancy Detection</h3>
+          <p class="text-xs text-[#6e665d] leading-relaxed">
+            When drone or satellite survey scans are updated, the system checks the as-built model against the sanctioned boundary. If anything doesn't match, it is flagged immediately.
+          </p>
+        </div>
+
+        <!-- Automatic Flag Alert Box -->
+        <div class="border border-rose-200 bg-rose-50/80 rounded-xl p-4 space-y-3">
+          <div class="flex items-center gap-2 text-rose-900 font-bold text-sm">
+            <svg class="w-4 h-4 text-rose-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            <span>Critical Discrepancy Flagged!</span>
+          </div>
+
+          <!-- Height Exceeded -->
+          <div class="bg-white p-3 rounded-lg border border-rose-200 shadow-2xs space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-rose-950">
+                Unapproved Extra Floors (+6.0m)
+              </span>
+              <span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-rose-600 text-white">
+                VIOLATION
+              </span>
+            </div>
+            <p class="text-[11px] text-[#6e665d] leading-relaxed">
+              Permitted: <strong>30.0m (10 floors)</strong>. As-built scan: <strong>36.0m (12 floors)</strong>. Two unauthorized penthouse floors built on rooftop.
+            </p>
+            <div class="text-[11px] font-mono text-rose-700 bg-rose-50 p-1.5 rounded border border-rose-100">
+              Flagged Units: Floor 11 (U1101, U1102) & Floor 12 (U1201, U1202)
+            </div>
+          </div>
+
+          <!-- Boundary Encroachment -->
+          <div class="bg-white p-3 rounded-lg border border-rose-200 shadow-2xs space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-rose-950">
+                Setback Margin Encroachment
+              </span>
+              <span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-amber-600 text-white">
+                2.0m OVERHANG
+              </span>
+            </div>
+            <p class="text-[11px] text-[#6e665d] leading-relaxed">
+              Cantilever balcony protrudes 2 meters beyond sanctioned cadastral boundary line into the street buffer.
+            </p>
+          </div>
+        </div>
+
+        <button onclick="triggerLaserScan()" class="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+          Run Live Spatial Audit Scan
+        </button>
+
+        <div class="p-3 bg-[#faf8f5] rounded-lg border border-[#e2dcce] text-[11px] text-[#78716c] leading-relaxed">
+          <strong>Autonomous municipal oversight:</strong> No corrupt paperwork or missed inspections. The digital twin automatically compares reality against the legal permit.
+        </div>
+      </div>
+
+      <!-- STEP 3 CONTENT -->
+      <div id="step-panel-3" class="hidden p-6 space-y-5">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
+              Step 3: Temporal Memory
+            </span>
+            <span class="text-xs font-semibold text-[#8c8275]">Lifecycle History</span>
+          </div>
+          <h3 class="text-lg font-extrabold text-[#1c1917]">Memory, Not Just a Snapshot</h3>
+          <p class="text-xs text-[#6e665d] leading-relaxed">
+            A building is not static. Every building keeps a running history over time — recording approvals, construction milestones, violations, and legal title freezes.
+          </p>
+        </div>
+
+        <!-- Timeline Scrubber -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-xs font-bold text-[#4a443d]">
+            <span>Timeline Scrubber (2021 – Present):</span>
+            <span id="timeline-year-badge" class="text-indigo-600 font-mono font-bold">2021</span>
+          </div>
+
+          <div class="grid grid-cols-5 gap-1 bg-[#f4f1ea] p-1 rounded-xl border border-[#e2dcce]">
+            <button onclick="selectTimeline(0)" id="t-btn-0" class="py-1.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-xs">2021</button>
+            <button onclick="selectTimeline(1)" id="t-btn-1" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]">2023</button>
+            <button onclick="selectTimeline(2)" id="t-btn-2" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]">2024</button>
+            <button onclick="selectTimeline(3)" id="t-btn-3" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]">2025</button>
+            <button onclick="selectTimeline(4)" id="t-btn-4" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]">2026</button>
+          </div>
+        </div>
+
+        <!-- Active Event Details -->
+        <div id="timeline-event-card" class="border border-[#e2dcce] rounded-xl p-4 bg-[#faf8f5] space-y-3">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="p-3.5 bg-indigo-50/70 border border-indigo-200 rounded-xl space-y-1.5 text-xs">
+          <div class="flex items-center gap-1.5 text-indigo-950 font-bold">
+            <svg class="w-4 h-4 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Preventing Secondary Title Fraud
+          </div>
+          <p class="text-indigo-900 leading-relaxed text-[11px]">
+            Because the record is immutable memory, unapproved floors constructed years later can never be disguised as "original construction" during resale or bank mortgages.
+          </p>
+        </div>
+      </div>
+
+      <!-- BOTTOM NAVIGATION BAR -->
+      <div class="p-4 bg-[#faf8f5] border-t border-[#e8e2d8] flex items-center justify-between shrink-0">
+        <button id="prev-btn" onclick="prevStep()" disabled class="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors opacity-40 cursor-not-allowed border-transparent text-[#9c9184]">
+          ← Previous
+        </button>
+
+        <span id="step-indicator" class="text-xs font-extrabold text-[#78716c]">
+          1 / 3
+        </span>
+
+        <button id="next-btn" onclick="nextStep()" class="flex items-center gap-1 text-xs font-bold px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition-colors cursor-pointer shadow-xs">
+          <span>Next Step</span> →
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT & THREE.JS LOGIC -->
+  <script>
+    // State
+    let currentStep = 1;
+    let isPlaying = false;
+    let playInterval = null;
+    let currentTimelineIdx = 0;
+    let isScanning = false;
+    let extrudedCount = 10;
+
+    const timelineData = [
+      {
+        year: '2021',
+        date: 'March 14, 2021',
+        title: 'Sanctioned Master Plan Approved',
+        badge: 'Sanctioned Permit',
+        badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        floors: 10,
+        hasViolation: false,
+        desc: 'Municipal planning authority grants building permit for 10 residential floors (30m max) with basement parking. Base ULPIN assigned.'
+      },
+      {
+        year: '2023',
+        date: 'January 10, 2023',
+        title: 'As-Built Physical Completion',
+        badge: 'Compliant Handover',
+        badgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+        floors: 10,
+        hasViolation: false,
+        desc: 'Construction completed adhering to sanctioned 30m height limit. Occupancy certificate issued and cadastral survey matches 100%.'
+      },
+      {
+        year: '2024',
+        date: 'August 22, 2024',
+        title: 'Unauthorized Vertical Extension Added',
+        badge: 'Violation Flagged',
+        badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
+        floors: 12,
+        hasViolation: true,
+        desc: 'Drone telemetry registers 2 additional penthouse levels (+6m) without municipal approval. Digital twin automatically files discrepancy.'
+      },
+      {
+        year: '2025',
+        date: 'April 05, 2025',
+        title: 'Strata Encumbrance & Title Freeze',
+        badge: 'Legal Action',
+        badgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+        floors: 12,
+        hasViolation: true,
+        desc: 'Municipal registry places public legal redline on Floors 11 & 12. Banks and prospective buyers scanning the ULPIN QR are immediately alerted.'
+      },
+      {
+        year: '2026',
+        date: 'Present Day (Live)',
+        title: 'Continuous Memory & Public Audit',
+        badge: 'Immutable Record',
+        badgeColor: 'bg-purple-100 text-purple-800 border-purple-300',
+        floors: 12,
+        hasViolation: true,
+        desc: 'Complete lifecycle memory preserved. Every change, violation, and permit modification remains verifiable forever.'
+      }
+    ];
+
+    // Three.js setup
+    let scene, camera, renderer, buildingGroup, scanMesh, boundaryBox;
+    let cameraAngle = 0.6;
+    let isUserInteracting = false;
+    let scanY = 0;
+    let scanDirection = 1;
+
+    function initThree() {
+      const container = document.getElementById('three-container');
+      const width = container.clientWidth;
+      const height = container.clientHeight || 520;
+
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xfcfbf8);
+
+      camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
+      camera.position.set(38, 28, 48);
+      camera.lookAt(0, 15, 0);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      container.appendChild(renderer.domElement);
+
+      // Lights
+      const ambient = new THREE.AmbientLight(0xffffff, 0.85);
+      scene.add(ambient);
+
+      const mainLight = new THREE.DirectionalLight(0xfff5ea, 1.4);
+      mainLight.position.set(45, 60, 35);
+      mainLight.castShadow = true;
+      scene.add(mainLight);
+
+      const fillLight = new THREE.DirectionalLight(0xdbeafe, 0.5);
+      fillLight.position.set(-30, 25, -30);
+      scene.add(fillLight);
+
+      // Ground plane
+      const grid = new THREE.GridHelper(60, 30, 0xd4ccbf, 0xede8df);
+      grid.position.y = -0.05;
+      scene.add(grid);
+
+      // Boundary Box (Sanctioned Envelope: 20m x 20m x 30m)
+      const boundaryGeo = new THREE.BoxGeometry(18, 30, 18);
+      const boundaryEdges = new THREE.EdgesGeometry(boundaryGeo);
+      const boundaryMat = new THREE.LineDashedMaterial({
+        color: 0x3d8b57,
+        dashSize: 1.2,
+        gapSize: 0.8,
+        linewidth: 2,
+      });
+      boundaryBox = new THREE.LineSegments(boundaryEdges, boundaryMat);
+      boundaryBox.computeLineDistances();
+      boundaryBox.position.set(0, 15, 0);
+      scene.add(boundaryBox);
+
+      // Building Group
+      buildingGroup = new THREE.Group();
+      scene.add(buildingGroup);
+
+      // Scan Laser Mesh
+      const scanGeo = new THREE.PlaneGeometry(28, 28);
+      const scanMat = new THREE.MeshBasicMaterial({
+        color: 0xef4444,
+        transparent: true,
+        opacity: 0,
+        side: THREE.DoubleSide
+      });
+      scanMesh = new THREE.Mesh(scanGeo, scanMat);
+      scanMesh.rotation.x = Math.PI / 2;
+      scanMesh.position.y = 0;
+      scene.add(scanMesh);
+
+      // Mouse drag controls
+      let isDown = false;
+      let startX = 0;
+      container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.clientX;
+        isUserInteracting = true;
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const dx = (e.clientX - startX) * 0.006;
+        cameraAngle -= dx;
+        startX = e.clientX;
+      });
+      window.addEventListener('mouseup', () => {
+        isDown = false;
+        setTimeout(() => { isUserInteracting = false; }, 2500);
+      });
+
+      // Resize
+      window.addEventListener('resize', () => {
+        const newW = container.clientWidth;
+        const newH = container.clientHeight;
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      });
+
+      // Render Loop
+      function animate() {
+        requestAnimationFrame(animate);
+
+        if (!isUserInteracting) {
+          cameraAngle += 0.003;
+          const radius = 55;
+          camera.position.x = Math.sin(cameraAngle) * radius;
+          camera.position.z = Math.cos(cameraAngle) * radius;
+          camera.lookAt(0, 15, 0);
+        }
+
+        if (isScanning && scanMesh) {
+          scanY += 0.45 * scanDirection;
+          if (scanY > 38) scanDirection = -1;
+          else if (scanY < 0) scanDirection = 1;
+          scanMesh.position.y = scanY;
+          scanMesh.material.opacity = 0.45 + Math.sin(Date.now() * 0.008) * 0.2;
+        }
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      renderBuilding(10, false);
+    }
+
+    // Render 3D building floors
+    function renderBuilding(floorsCount, highlightViolation) {
+      if (!buildingGroup) return;
+
+      while (buildingGroup.children.length > 0) {
+        buildingGroup.remove(buildingGroup.children[0]);
+      }
+
+      const floorH = 2.8;
+      const floorW = 15;
+      const floorD = 15;
+
+      // Base
+      const baseGeo = new THREE.BoxGeometry(floorW + 2, 0.8, floorD + 2);
+      const baseMat = new THREE.MeshStandardMaterial({ color: 0xded8ce, roughness: 0.8 });
+      const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+      baseMesh.position.y = 0.4;
+      buildingGroup.add(baseMesh);
+
+      for (let f = 1; f <= floorsCount; f++) {
+        const isIllegal = f > 10;
+        const posY = 0.8 + (f - 1) * floorH + floorH / 2;
+
+        const floorGeo = new THREE.BoxGeometry(floorW, floorH * 0.88, floorD);
+        let floorMat;
+
+        if (isIllegal && highlightViolation) {
+          floorMat = new THREE.MeshStandardMaterial({
+            color: 0xef4444,
+            roughness: 0.3,
+            metalness: 0.1,
+            emissive: 0x991b1b,
+            emissiveIntensity: 0.65,
+            transparent: true,
+            opacity: 0.95
+          });
+        } else if (isIllegal && !highlightViolation) {
+          floorMat = new THREE.MeshStandardMaterial({ color: 0xfca5a5, roughness: 0.5 });
+        } else {
+          floorMat = new THREE.MeshStandardMaterial({
+            color: f % 2 === 0 ? 0xffffff : 0xf4f1eb,
+            roughness: 0.4,
+            metalness: 0.05
+          });
+        }
+
+        const floorMesh = new THREE.Mesh(floorGeo, floorMat);
+        floorMesh.position.set(0, posY, 0);
+        floorMesh.castShadow = true;
+        buildingGroup.add(floorMesh);
+
+        // Slab
+        const slabGeo = new THREE.BoxGeometry(floorW + 0.6, 0.25, floorD + 0.6);
+        const slabMat = new THREE.MeshStandardMaterial({
+          color: isIllegal && highlightViolation ? 0x991b1b : 0xc8c0b2,
+          roughness: 0.9
+        });
+        const slabMesh = new THREE.Mesh(slabGeo, slabMat);
+        slabMesh.position.set(0, 0.8 + f * floorH - 0.125, 0);
+        buildingGroup.add(slabMesh);
+
+        // Window glass
+        const glassGeo = new THREE.BoxGeometry(floorW + 0.05, floorH * 0.4, floorD + 0.05);
+        const glassMat = new THREE.MeshStandardMaterial({
+          color: isIllegal && highlightViolation ? 0xfca5a5 : 0x7dd3fc,
+          roughness: 0.1,
+          metalness: 0.8,
+          transparent: true,
+          opacity: 0.75
+        });
+        const glassMesh = new THREE.Mesh(glassGeo, glassMat);
+        glassMesh.position.set(0, posY, 0);
+        buildingGroup.add(glassMesh);
+      }
+    }
+
+    // Extrusion replay for step 1
+    function replayExtrusion() {
+      let count = 0;
+      const counterEl = document.getElementById('extrusion-counter');
+      const barEl = document.getElementById('extrusion-bar');
+
+      const interval = setInterval(() => {
+        count += 1;
+        renderBuilding(count, false);
+        if (counterEl) counterEl.textContent = `${count} of 10 Floors Extruded`;
+        if (barEl) barEl.style.width = `${(count / 10) * 100}%`;
+        if (count >= 10) clearInterval(interval);
+      }, 160);
+    }
+
+    function triggerLaserScan() {
+      isScanning = true;
+      if (scanMesh) scanMesh.material.opacity = 0.5;
+      setTimeout(() => {
+        isScanning = false;
+        if (scanMesh) scanMesh.material.opacity = 0;
+      }, 4500);
+    }
+
+    // Step Switcher
+    function setStep(step) {
+      currentStep = step;
+
+      // Update Header Tabs
+      for (let s = 1; s <= 3; s++) {
+        const btn = document.getElementById(`step-btn-${s}`);
+        const panel = document.getElementById(`step-panel-${s}`);
+        if (s === step) {
+          btn.className = `px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white shadow-xs ${
+            step === 1 ? 'text-[#166534]' : step === 2 ? 'text-[#b91c1c]' : 'text-[#4338ca]'
+          }`;
+          panel.classList.remove('hidden');
+        } else {
+          btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]';
+          panel.classList.add('hidden');
+        }
+      }
+
+      // Update Controls & View
+      const legendViol = document.getElementById('legend-violation');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const indicator = document.getElementById('step-indicator');
+
+      indicator.textContent = `${step} / 3`;
+
+      if (step === 1) {
+        legendViol.classList.add('hidden');
+        prevBtn.disabled = true;
+        prevBtn.className = 'flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors opacity-40 cursor-not-allowed border-transparent text-[#9c9184]';
+        nextBtn.innerHTML = '<span>Next Step</span> →';
+        nextBtn.onclick = nextStep;
+        isScanning = false;
+        if (scanMesh) scanMesh.material.opacity = 0;
+        renderBuilding(10, false);
+      } else if (step === 2) {
+        legendViol.classList.remove('hidden');
+        prevBtn.disabled = false;
+        prevBtn.className = 'flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg border bg-white border-[#ded8cb] hover:bg-[#efece4] text-[#4a443d] cursor-pointer';
+        nextBtn.innerHTML = '<span>Next Step</span> →';
+        nextBtn.onclick = nextStep;
+        renderBuilding(12, true);
+        triggerLaserScan();
+      } else if (step === 3) {
+        prevBtn.disabled = false;
+        prevBtn.className = 'flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg border bg-white border-[#ded8cb] hover:bg-[#efece4] text-[#4a443d] cursor-pointer';
+        nextBtn.innerHTML = '<span>Replay Demo</span> ↺';
+        nextBtn.onclick = () => setStep(1);
+        selectTimeline(currentTimelineIdx);
+      }
+    }
+
+    function nextStep() {
+      if (currentStep < 3) setStep(currentStep + 1);
+    }
+
+    function prevStep() {
+      if (currentStep > 1) setStep(currentStep - 1);
+    }
+
+    // Timeline selection
+    function selectTimeline(idx) {
+      currentTimelineIdx = idx;
+      const ev = timelineData[idx];
+
+      // Update scrubber buttons
+      for (let i = 0; i < 5; i++) {
+        const btn = document.getElementById(`t-btn-${i}`);
+        if (i === idx) {
+          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-xs';
+        } else {
+          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]';
+        }
+      }
+
+      document.getElementById('timeline-year-badge').textContent = ev.year;
+
+      const card = document.getElementById('timeline-event-card');
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <span class="text-[11px] font-mono text-[#8c8275] block">${ev.date}</span>
+            <h4 class="font-bold text-sm text-[#1c1917] mt-0.5">${ev.title}</h4>
+          </div>
+          <span class="px-2 py-0.5 text-[10px] font-bold rounded-full border ${ev.badgeColor}">
+            ${ev.badge}
+          </span>
+        </div>
+        <p class="text-xs text-[#5e564d] leading-relaxed">${ev.desc}</p>
+        <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
+          <div class="bg-white p-2 rounded-lg border border-[#e8e2d8]">
+            <span class="text-[#8c8275] block text-[10px]">Physical State:</span>
+            <strong class="text-[#2c2825]">${ev.floors} Floors Built</strong>
+          </div>
+          <div class="bg-white p-2 rounded-lg border border-[#e8e2d8]">
+            <span class="text-[#8c8275] block text-[10px]">Compliance State:</span>
+            <strong class="${ev.hasViolation ? 'text-rose-700 font-bold' : 'text-emerald-700 font-bold'}">
+              ${ev.hasViolation ? 'Violation Flagged' : '100% Compliant'}
+            </strong>
+          </div>
+        </div>
+      `;
+
+      renderBuilding(ev.floors, ev.hasViolation);
+    }
+
+    // Auto Play Tour
+    function toggleAutoPlay() {
+      isPlaying = !isPlaying;
+      const btn = document.getElementById('autoplay-btn');
+      const text = document.getElementById('play-text');
+      const icon = document.getElementById('play-icon');
+
+      if (isPlaying) {
+        btn.className = 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 shadow-sm';
+        text.textContent = 'Pause Tour';
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+
+        playInterval = setInterval(() => {
+          if (currentStep === 1) setStep(2);
+          else if (currentStep === 2) setStep(3);
+          else {
+            toggleAutoPlay();
+            setStep(1);
+          }
+        }, 9000);
+      } else {
+        btn.className = 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700 shadow-sm';
+        text.textContent = 'Auto-Play Video Demo';
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+        if (playInterval) clearInterval(playInterval);
+      }
+    }
+
+    // Boot
+    window.addEventListener('DOMContentLoaded', () => {
+      initThree();
+      setStep(1);
+    });
+  </script>
+</body>
+</html>
