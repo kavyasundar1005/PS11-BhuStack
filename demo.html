@@ -3,9 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoParcel 3D - Video Pitch Demo (3-Step Walkthrough)</title>
+  <title>GeoParcel 3D - Municipal Registry Dashboard & Video Demo</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Leaflet CSS & JS CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,17 +27,44 @@
     code, pre {
       font-family: 'JetBrains Mono', monospace;
     }
-    .scanner-active {
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+    /* Leaflet customization */
+    .leaflet-container {
+      background-color: #f7f5f0 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+    .custom-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+    .custom-marker:hover {
+      transform: scale(1.15);
+    }
+    .marker-compliant {
+      background: linear-gradient(135deg, #10b981, #047857);
+      border: 2px solid #ffffff;
+    }
+    .marker-height-violation {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      border: 2px solid #ffffff;
+    }
+    .marker-encroachment {
+      background: linear-gradient(135deg, #f59e0b, #b45309);
+      border: 2px solid #ffffff;
     }
     @keyframes pulseGlow {
       0%, 100% { opacity: 0.9; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.02); }
+      50% { opacity: 1; transform: scale(1.03); }
     }
     .pulse-danger {
       animation: pulseGlow 1.5s infinite ease-in-out;
     }
-    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
     }
@@ -46,8 +79,8 @@
 </head>
 <body class="bg-[#faf8f5] text-[#2c2825] flex flex-col h-screen select-none">
 
-  <!-- STANDALONE HEADER -->
-  <header class="bg-white/95 backdrop-blur-md border-b border-[#e8e2d8] px-6 py-3.5 flex items-center justify-between gap-4 z-40 shrink-0">
+  <!-- TOP HEADER -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-[#e8e2d8] px-6 py-3 flex items-center justify-between gap-4 z-40 shrink-0">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#166534] to-[#3d8b57] text-white flex items-center justify-center font-extrabold shadow-sm">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -55,57 +88,230 @@
       <div>
         <div class="flex items-center gap-2">
           <h1 class="font-extrabold text-base tracking-tight text-[#1c1917]">
-            GeoParcel 3D • Video Pitch Demonstration
+            GeoParcel 3D • Municipal Digital Twin & Cadastral Registry
           </h1>
           <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#f0fdf4] text-[#166534] border border-[#bbf7d0]">
-            Standalone Demo
+            Demo Suite
           </span>
         </div>
         <p class="text-xs text-[#78716c]">
-          3-Step Core Concept: 3D Re-construction → Automated Approval Audit → Running Historical Memory
+          Locate Cadastral Parcels on Map → Ingest Floor Plans → Automated Deviation Audits → Lifecycle Memory
         </p>
       </div>
     </div>
 
-    <!-- Step Controls & Auto-Play -->
-    <div class="flex items-center gap-3">
-      <!-- 3 Step Tabs -->
+    <!-- MAIN VIEW MODE TABS -->
+    <div class="flex items-center gap-2">
+      <!-- Mode Switcher -->
       <div class="flex items-center bg-[#f5f2eb] p-1 rounded-xl border border-[#e2dcce]">
-        <button id="step-btn-1" onclick="setStep(1)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#166534] shadow-xs">
-          <span class="w-4 h-4 rounded-full bg-[#166534] text-white text-[10px] flex items-center justify-center font-bold">1</span>
-          <span>1. Simple 3D Model</span>
+        <button id="view-tab-dashboard" onclick="switchView('dashboard')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#166534] shadow-xs cursor-pointer">
+          <svg class="w-3.5 h-3.5 text-[#166534]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+          <span>Map & Dashboard</span>
         </button>
-        <button id="step-btn-2" onclick="setStep(2)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]">
-          <span class="w-4 h-4 rounded-full bg-[#991b1b] text-white text-[10px] flex items-center justify-center font-bold">2</span>
-          <span>2. Check Approvals</span>
-        </button>
-        <button id="step-btn-3" onclick="setStep(3)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]">
-          <span class="w-4 h-4 rounded-full bg-[#4338ca] text-white text-[10px] flex items-center justify-center font-bold">3</span>
-          <span>3. Running History</span>
+
+        <button id="view-tab-3d" onclick="switchView('3d')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917] cursor-pointer">
+          <svg class="w-3.5 h-3.5 text-[#4338ca]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <span>3-Step 3D Walkthrough</span>
         </button>
       </div>
 
-      <!-- Auto Play Mode -->
-      <button id="autoplay-btn" onclick="toggleAutoPlay()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700 shadow-sm">
+      <!-- Auto Play Pitch for Video -->
+      <button id="autoplay-btn" onclick="toggleAutoPlay()" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700 shadow-sm">
         <svg id="play-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span id="play-text">Auto-Play Video Demo</span>
+        <span id="play-text">Auto-Play 3D Demo</span>
       </button>
 
       <a href="http://localhost:3000/" target="_blank" class="text-xs px-3 py-1.5 rounded-xl border border-[#ded8cb] bg-[#f9f7f2] hover:bg-[#efece4] text-[#4a443d] font-semibold transition-colors flex items-center gap-1">
-        <span>Open Main App ↗</span>
+        <span>Main App ↗</span>
       </a>
     </div>
   </header>
 
-  <!-- MAIN DEMO VIEWPORT -->
-  <main class="flex-1 flex overflow-hidden relative">
+  <!-- ========================================== -->
+  <!-- VIEW 1: MUNICIPAL DASHBOARD & MAP LOCATOR -->
+  <!-- ========================================== -->
+  <section id="view-dashboard" class="flex-1 flex flex-col overflow-hidden">
+    
+    <!-- TOP STATS METRIC CARDS -->
+    <div class="bg-white border-b border-[#e8e2d8] px-6 py-3.5 shadow-2xs shrink-0">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-7xl mx-auto">
+        
+        <div class="p-3 bg-[#faf8f5] rounded-xl border border-[#e8e2d8] flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+          </div>
+          <div>
+            <span class="text-[11px] font-semibold text-[#8c8275] uppercase tracking-wider block">Registered 3D Parcels</span>
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-lg font-extrabold text-[#1c1917]">1,428</span>
+              <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1 rounded">+12 this wk</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-[#faf8f5] rounded-xl border border-[#e8e2d8] flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center font-bold shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          </div>
+          <div>
+            <span class="text-[11px] font-semibold text-[#8c8275] uppercase tracking-wider block">Sanctioned Units</span>
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-lg font-extrabold text-[#1c1917]">14,890</span>
+              <span class="text-[10px] text-blue-700 font-bold bg-blue-50 px-1 rounded">100% ULPIN</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-[#faf8f5] rounded-xl border border-[#e8e2d8] flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-800 flex items-center justify-center font-bold shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          </div>
+          <div>
+            <span class="text-[11px] font-semibold text-[#8c8275] uppercase tracking-wider block">Spatial Violations Flagged</span>
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-lg font-extrabold text-rose-700">34</span>
+              <span class="text-[10px] text-rose-700 font-bold bg-rose-50 px-1 rounded">2.3% audit</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-[#faf8f5] rounded-xl border border-[#e8e2d8] flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          </div>
+          <div>
+            <span class="text-[11px] font-semibold text-[#8c8275] uppercase tracking-wider block">Verification Integrity</span>
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-lg font-extrabold text-[#1c1917]">99.8%</span>
+              <span class="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1 rounded">Immutable</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MAIN MAP & LOCATOR SECTION -->
+    <div class="flex-1 flex overflow-hidden">
+      
+      <!-- LEFT: INTERACTIVE LEAFLET MAP -->
+      <div class="flex-1 relative flex flex-col">
+        <!-- Search and Filter Floating Bar -->
+        <div class="absolute top-4 left-4 z-[500] max-w-md w-full bg-white/95 backdrop-blur-md p-3 rounded-2xl border border-[#e2dcce] shadow-md flex flex-col gap-2">
+          <div class="flex items-center gap-2 bg-[#f4f1ea] px-3 py-2 rounded-xl border border-[#ded8cb]">
+            <svg class="w-4 h-4 text-[#78716c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input 
+              id="map-search-input" 
+              type="text" 
+              placeholder="Search by Building Name or Base ULPIN..." 
+              oninput="filterBuildings()"
+              class="w-full bg-transparent text-xs font-medium focus:outline-none placeholder-[#9c9184]"
+            />
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] pt-1">
+            <span class="text-[#78716c] font-semibold">Filter Status:</span>
+            <div class="flex items-center gap-1">
+              <button onclick="setFilter('all')" id="filter-all" class="px-2 py-0.5 rounded-md font-bold bg-[#166534] text-white">All</button>
+              <button onclick="setFilter('compliant')" id="filter-compliant" class="px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]">Compliant</button>
+              <button onclick="setFilter('violation')" id="filter-violation" class="px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]">Violations</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map Container -->
+        <div id="map-container" class="w-full flex-1"></div>
+
+        <!-- Map Legend -->
+        <div class="absolute bottom-4 left-4 z-[500] bg-white/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#e2dcce] shadow-sm text-xs flex items-center gap-3">
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span>
+            <span class="font-medium text-[#4a443d]">Compliant</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-full bg-rose-600 inline-block"></span>
+            <span class="font-medium text-[#4a443d]">Height Breach</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-full bg-amber-600 inline-block"></span>
+            <span class="font-medium text-[#4a443d]">Setback Encroachment</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: BUILDING SELECTOR & LOCATOR DRAWER -->
+      <div class="w-[430px] bg-white border-l border-[#e8e2d8] flex flex-col justify-between overflow-y-auto shrink-0 shadow-xs z-20">
+        
+        <!-- Drawer Header -->
+        <div class="p-5 border-b border-[#e8e2d8] space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#166534] uppercase tracking-wider">
+              Cadastral Registry Locator
+            </span>
+            <span class="text-[11px] font-mono font-bold text-[#78716c]">
+              Chennai Region
+            </span>
+          </div>
+          <h2 class="text-base font-extrabold text-[#1c1917]">
+            Select a Cadastral Building
+          </h2>
+          <p class="text-xs text-[#6e665d] leading-relaxed">
+            Click any pin on the map or select from the registry list below to inspect its legal parcel envelope and launch its 3D digital twin.
+          </p>
+        </div>
+
+        <!-- Buildings List -->
+        <div id="buildings-list" class="p-4 space-y-3 flex-1 overflow-y-auto">
+          <!-- Dynamically populated by JS -->
+        </div>
+
+        <!-- Selected Building Quick Action Banner -->
+        <div id="selected-building-banner" class="p-4 bg-[#faf8f5] border-t border-[#e8e2d8] space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <span id="banner-area" class="text-[10px] font-bold text-[#8c8275] uppercase block">Selected Property</span>
+              <h3 id="banner-name" class="text-sm font-extrabold text-[#1c1917]">Sunrise Apartments</h3>
+            </div>
+            <span id="banner-status-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+              Compliant
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+            <div class="bg-white p-2 rounded-lg border border-[#e2dcce]">
+              <span class="text-[10px] text-[#8c8275] font-sans block">Base ULPIN</span>
+              <strong id="banner-ulpin" class="text-xs text-[#2c2825]">14A7B9C23D45E1</strong>
+            </div>
+            <div class="bg-white p-2 rounded-lg border border-[#e2dcce]">
+              <span class="text-[10px] text-[#8c8275] font-sans block">Sanctioned Height</span>
+              <strong id="banner-height" class="text-xs font-sans text-[#2c2825]">30m (10 Floors)</strong>
+            </div>
+          </div>
+
+          <!-- LAUNCH 3D DIGITAL TWIN BUTTON -->
+          <button onclick="launch3DWalkthroughForSelected()" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#166534] to-[#15803d] hover:from-[#14532d] hover:to-[#166534] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer">
+            <span>Inspect 3D Digital Twin & Audit</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================== -->
+  <!-- VIEW 2: 3-STEP 3D WALKTHROUGH DEMO VIEW -->
+  <!-- ========================================== -->
+  <section id="view-3d" class="hidden flex-1 flex overflow-hidden relative">
     
     <!-- LEFT: 3D THREE.JS CANVAS -->
     <div class="flex-1 flex flex-col relative bg-gradient-to-b from-[#faf8f5] to-[#f0eae1] overflow-hidden">
       <!-- Three.js Container -->
       <div id="three-container" class="w-full flex-1 cursor-grab active:cursor-grabbing"></div>
 
-      <!-- 3D Legend & Hints Overlay -->
+      <!-- 3D Legend & Controls Overlay -->
       <div class="absolute top-4 left-4 z-20 flex flex-col gap-2 pointer-events-none">
         <div class="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#e5dfd3] shadow-xs text-xs pointer-events-auto flex items-center gap-3">
           <div class="flex items-center gap-1.5">
@@ -122,6 +328,23 @@
           💡 Click and drag with mouse to orbit around the 3D model
         </div>
       </div>
+
+      <!-- Step Navigation Pills in Top Center -->
+      <div class="absolute top-4 right-4 z-20 flex items-center bg-white/95 backdrop-blur-md p-1 rounded-xl border border-[#e2dcce] shadow-xs">
+        <button id="step-btn-1" onclick="setStep(1)" class="px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#166534] shadow-xs">
+          <span class="w-4 h-4 rounded-full bg-[#166534] text-white text-[10px] flex items-center justify-center font-bold">1</span>
+          <span>1. Simple 3D Model</span>
+        </button>
+        <button id="step-btn-2" onclick="setStep(2)" class="px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]">
+          <span class="w-4 h-4 rounded-full bg-[#991b1b] text-white text-[10px] flex items-center justify-center font-bold">2</span>
+          <span>2. Check Approvals</span>
+        </button>
+        <button id="step-btn-3" onclick="setStep(3)" class="px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]">
+          <span class="w-4 h-4 rounded-full bg-[#4338ca] text-white text-[10px] flex items-center justify-center font-bold">3</span>
+          <span>3. Running History</span>
+        </button>
+      </div>
+
     </div>
 
     <!-- RIGHT: STEP DETAILS & ACTIONS PANEL -->
@@ -165,7 +388,7 @@
             </div>
             <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
               <span class="text-[#8c8275] block text-[10px]">Base Cadastral ULPIN</span>
-              <strong class="text-xs font-mono text-[#2c2825]">14A7B9C23D45E1</strong>
+              <strong id="step1-ulpin" class="text-xs font-mono text-[#2c2825]">14A7B9C23D45E1</strong>
             </div>
             <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
               <span class="text-[#8c8275] block text-[10px]">Parking Allocation</span>
@@ -329,11 +552,70 @@
         </button>
       </div>
     </div>
-  </main>
+  </section>
 
-  <!-- JAVASCRIPT & THREE.JS LOGIC -->
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT: MAP, DASHBOARD & THREE.JS LOGIC -->
+  <!-- ========================================== -->
   <script>
-    // State
+    // Building Data matching municipal database
+    const BUILDINGS_DATABASE = [
+      {
+        id: 'sunrise-apartments',
+        name: 'Sunrise Apartments',
+        area: 'T Nagar',
+        lat: 13.0604,
+        lng: 80.2496,
+        baseUlpin: '14A7B9C23D45E1',
+        height: 30,
+        floorsCount: 10,
+        status: 'compliant',
+        statusLabel: 'Fully Compliant',
+        badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        markerClass: 'marker-compliant',
+        parking: 'Basement (6 slots)',
+        description: '10-storey residential community in T Nagar with basement parking and strictly compliant footprint.'
+      },
+      {
+        id: 'palm-residency',
+        name: 'Palm Residency',
+        area: 'Alwarpet',
+        lat: 13.0387,
+        lng: 80.2377,
+        baseUlpin: '21B4F7D89K12L3',
+        height: 36,
+        floorsCount: 12,
+        status: 'violation',
+        statusLabel: 'Height Breach (+6m)',
+        badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
+        markerClass: 'marker-height-violation',
+        parking: 'Surface Lot (8 slots)',
+        description: '12-storey development in Alwarpet exceeding sanctioned master plan limit by 2 unapproved penthouse floors.'
+      },
+      {
+        id: 'garden-view-towers',
+        name: 'Garden View Towers',
+        area: 'Adyar',
+        lat: 13.0067,
+        lng: 80.2206,
+        baseUlpin: '33C9E2A56M78N4',
+        height: 27,
+        floorsCount: 9,
+        status: 'encroachment',
+        statusLabel: 'Boundary Encroachment',
+        badgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+        markerClass: 'marker-encroachment',
+        parking: 'Basement (10 slots)',
+        description: '9-storey residential complex in Adyar protruding 2 meters past registered cadastral property boundary.'
+      }
+    ];
+
+    let selectedBuilding = BUILDINGS_DATABASE[0];
+    let activeFilter = 'all';
+    let leafletMap = null;
+    let mapMarkers = [];
+
+    // 3D Walkthrough state
     let currentStep = 1;
     let isPlaying = false;
     let playInterval = null;
@@ -394,16 +676,222 @@
       }
     ];
 
-    // Three.js setup
+    // Three.js Scene Variables
     let scene, camera, renderer, buildingGroup, scanMesh, boundaryBox;
     let cameraAngle = 0.6;
     let isUserInteracting = false;
     let scanY = 0;
     let scanDirection = 1;
 
+    // View Switcher (Dashboard Map vs 3D Walkthrough)
+    function switchView(view) {
+      const viewDash = document.getElementById('view-dashboard');
+      const view3D = document.getElementById('view-3d');
+      const tabDash = document.getElementById('view-tab-dashboard');
+      const tab3D = document.getElementById('view-tab-3d');
+      const autoPlayBtn = document.getElementById('autoplay-btn');
+
+      if (view === 'dashboard') {
+        viewDash.classList.remove('hidden');
+        view3D.classList.add('hidden');
+        autoPlayBtn.classList.add('hidden');
+
+        tabDash.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#166534] shadow-xs cursor-pointer';
+        tab3D.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917] cursor-pointer';
+
+        if (leafletMap) {
+          setTimeout(() => { leafletMap.invalidateSize(); }, 200);
+        }
+      } else {
+        viewDash.classList.add('hidden');
+        view3D.classList.remove('hidden');
+        autoPlayBtn.classList.remove('hidden');
+
+        tab3D.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#4338ca] shadow-xs cursor-pointer';
+        tabDash.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917] cursor-pointer';
+
+        if (!scene) initThree();
+        setStep(1);
+      }
+    }
+
+    // Initialize Leaflet Map
+    function initLeafletMap() {
+      if (leafletMap) return;
+
+      // Center around Chennai T Nagar / Alwarpet
+      leafletMap = L.map('map-container', {
+        zoomControl: false
+      }).setView([13.042, 80.238], 13);
+
+      L.control.zoom({ position: 'bottomright' }).addTo(leafletMap);
+
+      // Standard Free OpenStreetMap Tiles (100% Reliable, Zero API Key Required)
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+      }).addTo(leafletMap);
+
+      setTimeout(() => {
+        leafletMap.invalidateSize();
+      }, 150);
+
+      renderMapMarkers();
+      renderBuildingsList();
+      updateSelectedBanner(selectedBuilding);
+    }
+
+    function renderMapMarkers() {
+      // Clear existing
+      mapMarkers.forEach(m => leafletMap.removeLayer(m));
+      mapMarkers = [];
+
+      BUILDINGS_DATABASE.forEach(b => {
+        if (activeFilter === 'compliant' && b.status !== 'compliant') return;
+        if (activeFilter === 'violation' && b.status === 'compliant') return;
+
+        // Custom HTML Marker Icon
+        const icon = L.divIcon({
+          className: '',
+          html: `<div class="custom-marker ${b.markerClass} w-8 h-8 text-xs flex items-center justify-center font-bold">
+                   <span>${b.floorsCount}F</span>
+                 </div>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        });
+
+        const marker = L.marker([b.lat, b.lng], { icon }).addTo(leafletMap);
+
+        marker.on('click', () => {
+          selectBuilding(b);
+        });
+
+        // Popup
+        marker.bindPopup(`
+          <div class="p-1 space-y-1 text-xs">
+            <strong class="font-bold text-sm block">${b.name}</strong>
+            <span class="text-[11px] text-[#78716c] block">${b.area} • ULPIN: <code class="font-mono text-[10px]">${b.baseUlpin}</code></span>
+            <div class="pt-1 flex items-center justify-between">
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${b.badgeColor}">${b.statusLabel}</span>
+              <button onclick="launch3DWalkthrough('${b.id}')" class="text-[10px] font-bold text-emerald-800 underline cursor-pointer">Inspect 3D ➔</button>
+            </div>
+          </div>
+        `);
+
+        mapMarkers.push(marker);
+      });
+    }
+
+    function renderBuildingsList() {
+      const listEl = document.getElementById('buildings-list');
+      const searchVal = document.getElementById('map-search-input').value.toLowerCase();
+
+      listEl.innerHTML = '';
+
+      const filtered = BUILDINGS_DATABASE.filter(b => {
+        const matchesSearch = b.name.toLowerCase().includes(searchVal) || b.baseUlpin.toLowerCase().includes(searchVal) || b.area.toLowerCase().includes(searchVal);
+        const matchesFilter = activeFilter === 'all' || 
+          (activeFilter === 'compliant' && b.status === 'compliant') || 
+          (activeFilter === 'violation' && b.status !== 'compliant');
+        return matchesSearch && matchesFilter;
+      });
+
+      filtered.forEach(b => {
+        const isSelected = selectedBuilding.id === b.id;
+        const item = document.createElement('div');
+        item.className = `p-3 rounded-xl border transition-all cursor-pointer ${
+          isSelected 
+            ? 'bg-[#f4fbf7] border-emerald-400 shadow-xs ring-1 ring-emerald-300' 
+            : 'bg-[#faf8f5] border-[#e8e2d8] hover:bg-[#f5f2eb]'
+        }`;
+
+        item.onclick = () => selectBuilding(b);
+
+        item.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="text-[10px] font-bold text-[#8c8275] block">${b.area}</span>
+              <h4 class="font-bold text-sm text-[#1c1917]">${b.name}</h4>
+              <span class="text-[11px] font-mono text-[#5c554e] block mt-0.5">${b.baseUlpin}</span>
+            </div>
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full border ${b.badgeColor}">
+              ${b.statusLabel}
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-1 text-[11px] text-[#6b6257] mt-2 pt-2 border-t border-[#ede8df]">
+            <span>Height: <strong>${b.height}m (${b.floorsCount}F)</strong></span>
+            <span>Parking: <strong>${b.parking.split(' ')[0]}</strong></span>
+          </div>
+        `;
+
+        listEl.appendChild(item);
+      });
+    }
+
+    function selectBuilding(b) {
+      selectedBuilding = b;
+      updateSelectedBanner(b);
+      renderBuildingsList();
+
+      if (leafletMap) {
+        leafletMap.flyTo([b.lat, b.lng], 15, { duration: 1.2 });
+      }
+    }
+
+    function updateSelectedBanner(b) {
+      document.getElementById('banner-name').textContent = b.name;
+      document.getElementById('banner-area').textContent = `Selected: ${b.area}`;
+      document.getElementById('banner-ulpin').textContent = b.baseUlpin;
+      document.getElementById('banner-height').textContent = `${b.height}m (${b.floorsCount} Floors)`;
+
+      const badge = document.getElementById('banner-status-badge');
+      badge.textContent = b.statusLabel;
+      badge.className = `px-2 py-0.5 text-[10px] font-bold rounded-full border ${b.badgeColor}`;
+    }
+
+    function filterBuildings() {
+      renderBuildingsList();
+      renderMapMarkers();
+    }
+
+    function setFilter(filterType) {
+      activeFilter = filterType;
+      ['all', 'compliant', 'violation'].forEach(f => {
+        const btn = document.getElementById(`filter-all`);
+        const bComp = document.getElementById(`filter-compliant`);
+        const bViol = document.getElementById(`filter-violation`);
+        if (f === filterType) {
+          if (f === 'all') btn.className = 'px-2 py-0.5 rounded-md font-bold bg-[#166534] text-white';
+          if (f === 'compliant') bComp.className = 'px-2 py-0.5 rounded-md font-bold bg-[#166534] text-white';
+          if (f === 'violation') bViol.className = 'px-2 py-0.5 rounded-md font-bold bg-[#991b1b] text-white';
+        } else {
+          if (f === 'all') btn.className = 'px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]';
+          if (f === 'compliant') bComp.className = 'px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]';
+          if (f === 'violation') bViol.className = 'px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]';
+        }
+      });
+      renderBuildingsList();
+      renderMapMarkers();
+    }
+
+    function launch3DWalkthroughForSelected() {
+      switchView('3d');
+    }
+
+    function launch3DWalkthrough(id) {
+      const b = BUILDINGS_DATABASE.find(item => item.id === id);
+      if (b) selectBuilding(b);
+      switchView('3d');
+    }
+
+    // -------------------------------------------------------------
+    // THREE.JS 3D RE-CONSTRUCTION & AUDIT SCAN IMPLEMENTATION
+    // -------------------------------------------------------------
     function initThree() {
       const container = document.getElementById('three-container');
-      const width = container.clientWidth;
+      if (!container || scene) return;
+
+      const width = container.clientWidth || 800;
       const height = container.clientHeight || 520;
 
       scene = new THREE.Scene();
@@ -421,7 +909,7 @@
 
       container.appendChild(renderer.domElement);
 
-      // Lights
+      // Lighting
       const ambient = new THREE.AmbientLight(0xffffff, 0.85);
       scene.add(ambient);
 
@@ -434,12 +922,12 @@
       fillLight.position.set(-30, 25, -30);
       scene.add(fillLight);
 
-      // Ground plane
+      // Grid Ground
       const grid = new THREE.GridHelper(60, 30, 0xd4ccbf, 0xede8df);
       grid.position.y = -0.05;
       scene.add(grid);
 
-      // Boundary Box (Sanctioned Envelope: 20m x 20m x 30m)
+      // Cadastral Sanctioned Box Envelope (30m max height)
       const boundaryGeo = new THREE.BoxGeometry(18, 30, 18);
       const boundaryEdges = new THREE.EdgesGeometry(boundaryGeo);
       const boundaryMat = new THREE.LineDashedMaterial({
@@ -453,11 +941,11 @@
       boundaryBox.position.set(0, 15, 0);
       scene.add(boundaryBox);
 
-      // Building Group
+      // Group
       buildingGroup = new THREE.Group();
       scene.add(buildingGroup);
 
-      // Scan Laser Mesh
+      // Laser Scan Beam
       const scanGeo = new THREE.PlaneGeometry(28, 28);
       const scanMat = new THREE.MeshBasicMaterial({
         color: 0xef4444,
@@ -491,6 +979,7 @@
 
       // Resize
       window.addEventListener('resize', () => {
+        if (!container || !renderer || !camera) return;
         const newW = container.clientWidth;
         const newH = container.clientHeight;
         camera.aspect = newW / newH;
@@ -525,7 +1014,6 @@
       renderBuilding(10, false);
     }
 
-    // Render 3D building floors
     function renderBuilding(floorsCount, highlightViolation) {
       if (!buildingGroup) return;
 
@@ -537,7 +1025,7 @@
       const floorW = 15;
       const floorD = 15;
 
-      // Base
+      // Base Podium
       const baseGeo = new THREE.BoxGeometry(floorW + 2, 0.8, floorD + 2);
       const baseMat = new THREE.MeshStandardMaterial({ color: 0xded8ce, roughness: 0.8 });
       const baseMesh = new THREE.Mesh(baseGeo, baseMat);
@@ -586,7 +1074,7 @@
         slabMesh.position.set(0, 0.8 + f * floorH - 0.125, 0);
         buildingGroup.add(slabMesh);
 
-        // Window glass
+        // Window Glass Band
         const glassGeo = new THREE.BoxGeometry(floorW + 0.05, floorH * 0.4, floorD + 0.05);
         const glassMat = new THREE.MeshStandardMaterial({
           color: isIllegal && highlightViolation ? 0xfca5a5 : 0x7dd3fc,
@@ -601,7 +1089,6 @@
       }
     }
 
-    // Extrusion replay for step 1
     function replayExtrusion() {
       let count = 0;
       const counterEl = document.getElementById('extrusion-counter');
@@ -625,26 +1112,24 @@
       }, 4500);
     }
 
-    // Step Switcher
     function setStep(step) {
       currentStep = step;
 
-      // Update Header Tabs
+      // Update Step Tabs
       for (let s = 1; s <= 3; s++) {
         const btn = document.getElementById(`step-btn-${s}`);
         const panel = document.getElementById(`step-panel-${s}`);
         if (s === step) {
-          btn.className = `px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white shadow-xs ${
+          btn.className = `px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white shadow-xs ${
             step === 1 ? 'text-[#166534]' : step === 2 ? 'text-[#b91c1c]' : 'text-[#4338ca]'
           }`;
           panel.classList.remove('hidden');
         } else {
-          btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]';
+          btn.className = 'px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]';
           panel.classList.add('hidden');
         }
       }
 
-      // Update Controls & View
       const legendViol = document.getElementById('legend-violation');
       const prevBtn = document.getElementById('prev-btn');
       const nextBtn = document.getElementById('next-btn');
@@ -686,12 +1171,10 @@
       if (currentStep > 1) setStep(currentStep - 1);
     }
 
-    // Timeline selection
     function selectTimeline(idx) {
       currentTimelineIdx = idx;
       const ev = timelineData[idx];
 
-      // Update scrubber buttons
       for (let i = 0; i < 5; i++) {
         const btn = document.getElementById(`t-btn-${i}`);
         if (i === idx) {
@@ -732,7 +1215,6 @@
       renderBuilding(ev.floors, ev.hasViolation);
     }
 
-    // Auto Play Tour
     function toggleAutoPlay() {
       isPlaying = !isPlaying;
       const btn = document.getElementById('autoplay-btn');
@@ -740,7 +1222,7 @@
       const icon = document.getElementById('play-icon');
 
       if (isPlaying) {
-        btn.className = 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 shadow-sm';
+        btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 shadow-sm';
         text.textContent = 'Pause Tour';
         icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
 
@@ -753,17 +1235,16 @@
           }
         }, 9000);
       } else {
-        btn.className = 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700 shadow-sm';
-        text.textContent = 'Auto-Play Video Demo';
+        btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700 shadow-sm';
+        text.textContent = 'Auto-Play 3D Demo';
         icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
         if (playInterval) clearInterval(playInterval);
       }
     }
 
-    // Boot
+    // Initialize on page load
     window.addEventListener('DOMContentLoaded', () => {
-      initThree();
-      setStep(1);
+      initLeafletMap();
     });
   </script>
 </body>
