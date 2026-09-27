@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoParcel 3D - Municipal Registry Dashboard & Video Demo</title>
+  <title>Bhu Stack - 3D Municipal Digital Twin & Cadastral Memory Registry</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Three.js CDN -->
@@ -14,23 +14,30 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #faf8f5;
-      color: #2c2825;
-      margin: 0;
-      padding: 0;
+      background-color: #0d1117;
+      color: #e6edf3;
       overflow-x: hidden;
     }
     code, pre {
       font-family: 'JetBrains Mono', monospace;
     }
-    /* Leaflet customization */
-    .leaflet-container {
-      background-color: #f7f5f0 !important;
-      font-family: 'Plus Jakarta Sans', sans-serif !important;
+    .gradient-text {
+      background: linear-gradient(135deg, #34d399, #10b981, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-orange {
+      background: linear-gradient(135deg, #fb923c, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glow-card {
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.08);
     }
     .custom-marker {
       display: flex;
@@ -39,15 +46,15 @@
       border-radius: 9999px;
       color: white;
       font-weight: bold;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
       transition: transform 0.2s ease;
       cursor: pointer;
     }
     .custom-marker:hover {
-      transform: scale(1.15);
+      transform: scale(1.2);
     }
     .marker-compliant {
-      background: linear-gradient(135deg, #10b981, #047857);
+      background: linear-gradient(135deg, #10b981, #059669);
       border: 2px solid #ffffff;
     }
     .marker-height-violation {
@@ -55,244 +62,432 @@
       border: 2px solid #ffffff;
     }
     .marker-encroachment {
-      background: linear-gradient(135deg, #f59e0b, #b45309);
+      background: linear-gradient(135deg, #f59e0b, #d97706);
       border: 2px solid #ffffff;
     }
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.9; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.03); }
-    }
-    .pulse-danger {
-      animation: pulseGlow 1.5s infinite ease-in-out;
-    }
+    /* Custom scrollbar */
     ::-webkit-scrollbar {
-      width: 6px;
+      width: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #f1ede6;
+      background: #161b22;
     }
     ::-webkit-scrollbar-thumb {
-      background: #d4ccbf;
+      background: #30363d;
       border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #484f58;
     }
   </style>
 </head>
-<body class="bg-[#faf8f5] text-[#2c2825] flex flex-col h-screen select-none">
+<body class="bg-[#0b0f17] text-[#e2e8f0] antialiased">
 
-  <!-- TOP HEADER -->
-  <header class="bg-white/95 backdrop-blur-md border-b border-[#e8e2d8] px-6 py-3 flex items-center justify-between gap-4 z-40 shrink-0">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#166534] to-[#3d8b57] text-white flex items-center justify-center font-extrabold shadow-sm">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-      </div>
-      <div>
-        <div class="flex items-center gap-2">
-          <h1 class="font-extrabold text-base tracking-tight text-[#1c1917]">
-            GeoParcel 3D • Municipal Digital Twin & Cadastral Registry
-          </h1>
-          <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#f0fdf4] text-[#166534] border border-[#bbf7d0]">
-            Demo Suite
-          </span>
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-[#0b0f17]/90 backdrop-blur-md border-b border-[#1e293b] px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-cyan-500 text-white flex items-center justify-center font-black shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
         </div>
-        <p class="text-xs text-[#78716c]">
-          Locate Cadastral Parcels on Map → Ingest Floor Plans → Automated Deviation Audits → Lifecycle Memory
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-black text-lg tracking-tight text-white">Bhu Stack</span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Prototype
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400">Municipal 3D Digital Twin & Temporal Cadastre</p>
+        </div>
+      </a>
+
+      <!-- Nav Links -->
+      <div class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-300">
+        <a href="#how-it-works" class="hover:text-emerald-400 transition-colors">How It Works</a>
+        <a href="#interactive-prototype" class="hover:text-emerald-400 transition-colors">Interactive 3D Demo</a>
+        <a href="#map-locator" class="hover:text-emerald-400 transition-colors">Cadastral Map</a>
+        <a href="#architecture" class="hover:text-emerald-400 transition-colors">System Architecture</a>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <a href="#interactive-prototype" class="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white shadow-md shadow-emerald-500/20 transition-all">
+          Try Live Prototype ↓
+        </a>
+        <a href="http://localhost:3000/" target="_blank" class="hidden sm:flex text-xs px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-semibold transition-colors items-center gap-1.5">
+          <span>Main App ↗</span>
+        </a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ============================================== -->
+  <!-- HERO SECTION                                   -->
+  <!-- ============================================== -->
+  <section id="hero" class="relative pt-20 pb-28 px-6 overflow-hidden">
+    <!-- Ambient Background Glow -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-emerald-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+    <div class="absolute top-1/3 left-1/4 w-[400px] h-[300px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto text-center space-y-6 relative z-10">
+      
+      <!-- Top Badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-xs font-semibold text-emerald-400 shadow-inner">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        Solving Urban Spatial Violations & 3D Land Registry
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+        Land Records Aren't Just Flat Maps. <br/>
+        <span class="gradient-text">They're 3D. And They Have Memory.</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="max-w-3xl mx-auto text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
+        <strong class="text-white">Bhu Stack</strong> transforms flat municipal cadastres into living 3D digital twins. It reconstructs multi-story buildings directly from sanctioned floor plans, automatically flags unauthorized extra floors and encroachments, and preserves continuous lifecycle memory over time.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="pt-4 flex items-center justify-center gap-4 flex-wrap">
+        <a href="#interactive-prototype" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white shadow-xl shadow-emerald-500/25 flex items-center gap-2 transition-all">
+          <span>Explore The 3-Step Prototype</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </a>
+        <a href="#map-locator" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-2 transition-all">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+          <span>Locate Buildings on Cadastral Map</span>
+        </a>
+      </div>
+
+      <!-- Quick Metrics Bar -->
+      <div class="pt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
+        <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm">
+          <div class="text-2xl font-black text-white">3D ULPIN</div>
+          <p class="text-xs text-slate-400 mt-1">Vertical floor-by-floor legal subdivision identifier</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm">
+          <div class="text-2xl font-black text-emerald-400">100% Auto</div>
+          <p class="text-xs text-slate-400 mt-1">Reconstruction from existing sanctioned blueprints</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm">
+          <div class="text-2xl font-black text-rose-400">Instant Flag</div>
+          <p class="text-xs text-slate-400 mt-1">Detects unapproved extra floors and setbacks</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm">
+          <div class="text-2xl font-black text-blue-400">Immutable</div>
+          <p class="text-xs text-slate-400 mt-1">Temporal historical memory ledger prevents resale fraud</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION: THE CORE IDEA IN THREE STEPS           -->
+  <!-- ============================================== -->
+  <section id="how-it-works" class="py-20 px-6 bg-[#0f1523] border-y border-slate-800/60">
+    <div class="max-w-6xl mx-auto space-y-12">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+          The Core Breakthrough
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-black text-white">
+          Here's The Idea In Three Steps
+        </h2>
+        <p class="text-sm sm:text-base text-slate-300">
+          How Bhu Stack solves illegal construction, protects property buyers, and gives municipalities continuous visibility.
         </p>
       </div>
-    </div>
 
-    <!-- MAIN VIEW MODE TABS -->
-    <div class="flex items-center gap-2">
-      <!-- Mode Switcher -->
-      <div class="flex items-center bg-[#f5f2eb] p-1 rounded-xl border border-[#e2dcce]">
-        <button id="view-tab-dashboard" onclick="switchView('dashboard')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#166534] shadow-xs cursor-pointer">
-          <svg class="w-3.5 h-3.5 text-[#166534]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-          <span>Map & Dashboard</span>
-        </button>
-
-        <button id="view-tab-3d" onclick="switchView('3d')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917] cursor-pointer">
-          <svg class="w-3.5 h-3.5 text-[#4338ca]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-          <span>3-Step 3D Walkthrough</span>
-        </button>
-      </div>
-
-      <!-- Auto Play Pitch for Video -->
-      <button id="autoplay-btn" onclick="toggleAutoPlay()" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700 shadow-sm">
-        <svg id="play-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span id="play-text">Auto-Play 3D Demo</span>
-      </button>
-
-      <a href="http://localhost:3000/" target="_blank" class="text-xs px-3 py-1.5 rounded-xl border border-[#ded8cb] bg-[#f9f7f2] hover:bg-[#efece4] text-[#4a443d] font-semibold transition-colors flex items-center gap-1">
-        <span>Main App ↗</span>
-      </a>
-    </div>
-  </header>
-
-  <!-- ========================================== -->
-  <!-- VIEW 1: MUNICIPAL DASHBOARD & MAP LOCATOR -->
-  <!-- ========================================== -->
-  <section id="view-dashboard" class="flex-1 flex flex-col overflow-hidden">
-    
-    <!-- TOP STATS METRIC CARDS -->
-    <div class="bg-white border-b border-[#e8e2d8] px-6 py-3.5 shadow-2xs shrink-0">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <div class="p-3 bg-[#faf8f5] rounded-xl border border-[#e8e2d8] flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-          </div>
-          <div>
-            <span class="text-[11px] font-semibold text-[#8c8275] uppercase tracking-wider block">Registered 3D Parcels</span>
-            <div class="flex items-baseline gap-1.5">
-              <span class="text-lg font-extrabold text-[#1c1917]">1,428</span>
-              <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1 rounded">+12 this wk</span>
+        <!-- Step 1 Card -->
+        <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-emerald-500/50 transition-all flex flex-col justify-between group">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-lg">
+              1
             </div>
+            <h3 class="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">
+              Build Simple 3D Model from Existing Plans
+            </h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              We build a simple, accurate 3D model of the building from what's already available — like a sanctioned floor plan or CAD drawings. No expensive manual 3D modeling required.
+            </p>
+          </div>
+          <div class="pt-6 border-t border-slate-800/80 mt-6 text-xs font-mono text-emerald-400 flex items-center gap-1.5">
+            <span>CMDA Approved Blueprint → 3D Volumetric Extrusion</span>
           </div>
         </div>
 
-        <div class="p-3 bg-[#faf8f5] rounded-xl border border-[#e8e2d8] flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center font-bold shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-          </div>
-          <div>
-            <span class="text-[11px] font-semibold text-[#8c8275] uppercase tracking-wider block">Sanctioned Units</span>
-            <div class="flex items-baseline gap-1.5">
-              <span class="text-lg font-extrabold text-[#1c1917]">14,890</span>
-              <span class="text-[10px] text-blue-700 font-bold bg-blue-50 px-1 rounded">100% ULPIN</span>
+        <!-- Step 2 Card -->
+        <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-rose-500/50 transition-all flex flex-col justify-between group">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center font-black text-lg">
+              2
             </div>
+            <h3 class="text-xl font-bold text-white group-hover:text-rose-300 transition-colors">
+              Check Against What Was Officially Approved
+            </h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              We check the as-built reality against what was officially sanctioned. If something doesn't match — an unapproved extra floor, for instance, or setback encroachment — the system flags it automatically.
+            </p>
+          </div>
+          <div class="pt-6 border-t border-slate-800/80 mt-6 text-xs font-mono text-rose-400 flex items-center gap-1.5">
+            <span>+6m Height Breach & Encroachments Flagged</span>
           </div>
         </div>
 
-        <div class="p-3 bg-[#faf8f5] rounded-xl border border-[#e8e2d8] flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-800 flex items-center justify-center font-bold shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-          </div>
-          <div>
-            <span class="text-[11px] font-semibold text-[#8c8275] uppercase tracking-wider block">Spatial Violations Flagged</span>
-            <div class="flex items-baseline gap-1.5">
-              <span class="text-lg font-extrabold text-rose-700">34</span>
-              <span class="text-[10px] text-rose-700 font-bold bg-rose-50 px-1 rounded">2.3% audit</span>
+        <!-- Step 3 Card -->
+        <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-indigo-500/50 transition-all flex flex-col justify-between group">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-black text-lg">
+              3
             </div>
+            <h3 class="text-xl font-bold text-white group-hover:text-indigo-300 transition-colors">
+              Running History: Memory, Not Just a Snapshot
+            </h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Every building keeps a running history over time, so the record isn't a one-time snapshot — it's memory. Buyers and banks can scrub through time to see every permit, change, and violation before investing.
+            </p>
           </div>
-        </div>
-
-        <div class="p-3 bg-[#faf8f5] rounded-xl border border-[#e8e2d8] flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-          </div>
-          <div>
-            <span class="text-[11px] font-semibold text-[#8c8275] uppercase tracking-wider block">Verification Integrity</span>
-            <div class="flex items-baseline gap-1.5">
-              <span class="text-lg font-extrabold text-[#1c1917]">99.8%</span>
-              <span class="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1 rounded">Immutable</span>
-            </div>
+          <div class="pt-6 border-t border-slate-800/80 mt-6 text-xs font-mono text-indigo-400 flex items-center gap-1.5">
+            <span>2021 Plan → 2024 Audit Flag → 2026 Live Ledger</span>
           </div>
         </div>
 
       </div>
-    </div>
 
-    <!-- MAIN MAP & LOCATOR SECTION -->
-    <div class="flex-1 flex overflow-hidden">
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION: INTERACTIVE 3D PROTOTYPE DEMO         -->
+  <!-- ============================================== -->
+  <section id="interactive-prototype" class="py-20 px-6 relative">
+    <div class="max-w-7xl mx-auto space-y-8">
       
-      <!-- LEFT: INTERACTIVE LEAFLET MAP -->
-      <div class="flex-1 relative flex flex-col">
-        <!-- Search and Filter Floating Bar -->
-        <div class="absolute top-4 left-4 z-[500] max-w-md w-full bg-white/95 backdrop-blur-md p-3 rounded-2xl border border-[#e2dcce] shadow-md flex flex-col gap-2">
-          <div class="flex items-center gap-2 bg-[#f4f1ea] px-3 py-2 rounded-xl border border-[#ded8cb]">
-            <svg class="w-4 h-4 text-[#78716c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input 
-              id="map-search-input" 
-              type="text" 
-              placeholder="Search by Building Name or Base ULPIN..." 
-              oninput="filterBuildings()"
-              class="w-full bg-transparent text-xs font-medium focus:outline-none placeholder-[#9c9184]"
-            />
-          </div>
-
-          <div class="flex items-center justify-between text-[11px] pt-1">
-            <span class="text-[#78716c] font-semibold">Filter Status:</span>
-            <div class="flex items-center gap-1">
-              <button onclick="setFilter('all')" id="filter-all" class="px-2 py-0.5 rounded-md font-bold bg-[#166534] text-white">All</button>
-              <button onclick="setFilter('compliant')" id="filter-compliant" class="px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]">Compliant</button>
-              <button onclick="setFilter('violation')" id="filter-violation" class="px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]">Violations</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Map Container -->
-        <div id="map-container" class="w-full flex-1"></div>
-
-        <!-- Map Legend -->
-        <div class="absolute bottom-4 left-4 z-[500] bg-white/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#e2dcce] shadow-sm text-xs flex items-center gap-3">
-          <div class="flex items-center gap-1.5">
-            <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span>
-            <span class="font-medium text-[#4a443d]">Compliant</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-3 h-3 rounded-full bg-rose-600 inline-block"></span>
-            <span class="font-medium text-[#4a443d]">Height Breach</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-3 h-3 rounded-full bg-amber-600 inline-block"></span>
-            <span class="font-medium text-[#4a443d]">Setback Encroachment</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT: BUILDING SELECTOR & LOCATOR DRAWER -->
-      <div class="w-[430px] bg-white border-l border-[#e8e2d8] flex flex-col justify-between overflow-y-auto shrink-0 shadow-xs z-20">
-        
-        <!-- Drawer Header -->
-        <div class="p-5 border-b border-[#e8e2d8] space-y-1">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#166534] uppercase tracking-wider">
-              Cadastral Registry Locator
-            </span>
-            <span class="text-[11px] font-mono font-bold text-[#78716c]">
-              Chennai Region
-            </span>
-          </div>
-          <h2 class="text-base font-extrabold text-[#1c1917]">
-            Select a Cadastral Building
+      <!-- Section Header -->
+      <div class="flex items-end justify-between gap-4 flex-wrap border-b border-slate-800 pb-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+            Live Embedded Prototype
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-black text-white mt-1">
+            Experience the 3-Step Prototype
           </h2>
-          <p class="text-xs text-[#6e665d] leading-relaxed">
-            Click any pin on the map or select from the registry list below to inspect its legal parcel envelope and launch its 3D digital twin.
+          <p class="text-sm text-slate-400 mt-1">
+            Interact with the actual 3D digital twin engine below. Orbit with your mouse, test automated audit scans, and scrub the history.
           </p>
         </div>
 
-        <!-- Buildings List -->
-        <div id="buildings-list" class="p-4 space-y-3 flex-1 overflow-y-auto">
-          <!-- Dynamically populated by JS -->
+        <!-- Auto-Play Demo Toggle for Videos -->
+        <div class="flex items-center gap-2">
+          <button id="autoplay-btn" onclick="toggleAutoPlay()" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer transition-all">
+            <svg id="play-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span id="play-text">Auto-Play Video Demo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Prototype Interactive Container -->
+      <div class="rounded-3xl border border-slate-800 bg-[#0f1523] shadow-2xl overflow-hidden flex flex-col lg:flex-row h-[720px]">
+        
+        <!-- 3D Canvas Side -->
+        <div class="flex-1 relative flex flex-col bg-gradient-to-b from-[#111726] to-[#0c101c] overflow-hidden">
+          
+          <!-- Top Floating Legend & Step Tabs -->
+          <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between gap-2 flex-wrap pointer-events-none">
+            
+            <div class="bg-slate-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/80 shadow-md text-xs pointer-events-auto flex items-center gap-3">
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-emerald-500 inline-block"></span>
+                <span class="font-semibold text-slate-200">Sanctioned (10 Floors / 30m)</span>
+              </div>
+              <div id="legend-violation" class="hidden flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-rose-500 inline-block animate-pulse"></span>
+                <span class="font-bold text-rose-400">Unapproved Floors 11 & 12 (+6m)</span>
+              </div>
+            </div>
+
+            <!-- Step Selector Tabs -->
+            <div class="bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-slate-700/80 shadow-md pointer-events-auto flex items-center gap-1">
+              <button id="step-btn-1" onclick="setStep(1)" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-emerald-500 text-slate-950 shadow-sm cursor-pointer">
+                1. Reconstruct 3D
+              </button>
+              <button id="step-btn-2" onclick="setStep(2)" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white cursor-pointer">
+                2. Audit Approvals
+              </button>
+              <button id="step-btn-3" onclick="setStep(3)" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white cursor-pointer">
+                3. Running Memory
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Three.js Canvas Element -->
+          <div id="three-container" class="w-full flex-1 cursor-grab active:cursor-grabbing"></div>
+
+          <!-- Bottom Camera Hint -->
+          <div class="absolute bottom-4 left-4 z-20 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-800 text-[11px] text-slate-400 pointer-events-none">
+            💡 Drag mouse to rotate 360° around the 3D building
+          </div>
         </div>
 
-        <!-- Selected Building Quick Action Banner -->
-        <div id="selected-building-banner" class="p-4 bg-[#faf8f5] border-t border-[#e8e2d8] space-y-3">
-          <div class="flex items-center justify-between">
+        <!-- Right Side: Step Controls & Explanation Drawer -->
+        <div class="w-full lg:w-[460px] bg-[#0c111d] border-t lg:border-t-0 lg:border-l border-slate-800 flex flex-col justify-between overflow-y-auto shrink-0 p-6 space-y-6">
+          
+          <!-- STEP 1 DRAWER CONTENT -->
+          <div id="step-panel-1" class="space-y-5">
             <div>
-              <span id="banner-area" class="text-[10px] font-bold text-[#8c8275] uppercase block">Selected Property</span>
-              <h3 id="banner-name" class="text-sm font-extrabold text-[#1c1917]">Sunrise Apartments</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                Step 1: Digital Reconstruction
+              </span>
+              <h3 class="text-xl font-black text-white mt-2">Reconstruct 3D from Floor Plan</h3>
+              <p class="text-xs text-slate-300 leading-relaxed mt-1">
+                Municipalities already have sanctioned plans on file. Bhu Stack reads the building envelope, floor counts, and setback limits to construct the digital twin automatically.
+              </p>
             </div>
-            <span id="banner-status-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
-              Compliant
-            </span>
+
+            <!-- Sanctioned Blueprint Spec Card -->
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-200">Blueprint File #CMDA-2021-084</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/30">
+                  APPROVED PERMIT
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800/80">
+                  <span class="text-[10px] text-slate-400 block">Sanctioned Height</span>
+                  <strong class="text-white text-sm">30.0m (G+9)</strong>
+                </div>
+                <div class="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800/80">
+                  <span class="text-[10px] text-slate-400 block">Approved Units</span>
+                  <strong class="text-white text-sm">20 Residential</strong>
+                </div>
+                <div class="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800/80">
+                  <span class="text-[10px] text-slate-400 block">Base Parcel ULPIN</span>
+                  <strong class="text-emerald-400 font-mono text-xs">14A7B9C23D45E1</strong>
+                </div>
+                <div class="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800/80">
+                  <span class="text-[10px] text-slate-400 block">Parking Type</span>
+                  <strong class="text-slate-200 text-xs">Basement Allotted</strong>
+                </div>
+              </div>
+
+              <!-- Animated Extrusion Bar -->
+              <div class="pt-2 space-y-1.5">
+                <div class="flex justify-between text-xs font-semibold">
+                  <span class="text-slate-300">Extrusion Progress:</span>
+                  <span id="extrusion-counter" class="text-emerald-400 font-mono">10 of 10 Floors</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div id="extrusion-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full transition-all duration-300 rounded-full" style="width: 100%"></div>
+                </div>
+              </div>
+
+              <button onclick="replayExtrusion()" class="w-full py-2 px-3 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
+                ↺ Replay 3D Extrusion
+              </button>
+            </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div class="bg-white p-2 rounded-lg border border-[#e2dcce]">
-              <span class="text-[10px] text-[#8c8275] font-sans block">Base ULPIN</span>
-              <strong id="banner-ulpin" class="text-xs text-[#2c2825]">14A7B9C23D45E1</strong>
+          <!-- STEP 2 DRAWER CONTENT -->
+          <div id="step-panel-2" class="hidden space-y-5">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                Step 2: Automated Audit
+              </span>
+              <h3 class="text-xl font-black text-white mt-2">Check Against Official Approvals</h3>
+              <p class="text-xs text-slate-300 leading-relaxed mt-1">
+                When drone lidar or satellite scans are uploaded, the model checks the physical structure against the legal permit. Any unapproved discrepancy is flagged immediately.
+              </p>
             </div>
-            <div class="bg-white p-2 rounded-lg border border-[#e2dcce]">
-              <span class="text-[10px] text-[#8c8275] font-sans block">Sanctioned Height</span>
-              <strong id="banner-height" class="text-xs font-sans text-[#2c2825]">30m (10 Floors)</strong>
+
+            <!-- Violation Alerts -->
+            <div class="p-4 rounded-xl bg-rose-950/30 border border-rose-500/30 space-y-3">
+              <div class="flex items-center gap-2 text-rose-400 font-bold text-sm">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                <span>Critical Deviations Detected</span>
+              </div>
+
+              <div class="p-3 rounded-lg bg-slate-900/90 border border-rose-500/20 space-y-1">
+                <div class="flex items-center justify-between text-xs font-bold text-rose-300">
+                  <span>Unapproved Rooftop Floors</span>
+                  <span class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 text-[10px]">+6.0m Violation</span>
+                </div>
+                <p class="text-[11px] text-slate-300">
+                  Approved: <strong>30.0m (10 floors)</strong>. As-Built: <strong>36.0m (12 floors)</strong>. Unauthorized penthouse levels added.
+                </p>
+              </div>
+
+              <div class="p-3 rounded-lg bg-slate-900/90 border border-amber-500/20 space-y-1">
+                <div class="flex items-center justify-between text-xs font-bold text-amber-300">
+                  <span>Setback Encroachment</span>
+                  <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px]">2.0m Overhang</span>
+                </div>
+                <p class="text-[11px] text-slate-300">
+                  Cantilevered balcony protrudes 2m past the sanctioned cadastral boundary into the street buffer.
+                </p>
+              </div>
+
+              <button onclick="triggerLaserScan()" class="w-full py-2.5 px-3 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-rose-600/20">
+                ⚡ Re-Run Spatial Scan Audit
+              </button>
             </div>
           </div>
 
-          <!-- LAUNCH 3D DIGITAL TWIN BUTTON -->
-          <button onclick="launch3DWalkthroughForSelected()" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#166534] to-[#15803d] hover:from-[#14532d] hover:to-[#166534] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer">
-            <span>Inspect 3D Digital Twin & Audit</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-          </button>
+          <!-- STEP 3 DRAWER CONTENT -->
+          <div id="step-panel-3" class="hidden space-y-5">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                Step 3: Continuous Memory
+              </span>
+              <h3 class="text-xl font-black text-white mt-2">Memory, Not Just a Snapshot</h3>
+              <p class="text-xs text-slate-300 leading-relaxed mt-1">
+                A building record isn't static. Bhu Stack keeps an immutable running memory ledger over time so buyers, banks, and authorities see the complete true history.
+              </p>
+            </div>
+
+            <!-- Temporal Scrubber -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-xs font-semibold text-slate-300">
+                <span>Select Timeline Year:</span>
+                <span id="timeline-year-badge" class="text-indigo-400 font-mono font-bold text-sm">2021</span>
+              </div>
+
+              <div class="grid grid-cols-5 gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                <button onclick="selectTimeline(0)" id="t-btn-0" class="py-1.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white cursor-pointer">2021</button>
+                <button onclick="selectTimeline(1)" id="t-btn-1" class="py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white cursor-pointer">2023</button>
+                <button onclick="selectTimeline(2)" id="t-btn-2" class="py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white cursor-pointer">2024</button>
+                <button onclick="selectTimeline(3)" id="t-btn-3" class="py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white cursor-pointer">2025</button>
+                <button onclick="selectTimeline(4)" id="t-btn-4" class="py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white cursor-pointer">2026</button>
+              </div>
+            </div>
+
+            <!-- Active Timeline Event Card -->
+            <div id="timeline-event-card" class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+            <button id="prev-btn" onclick="prevStep()" disabled class="text-xs font-bold px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-500 cursor-not-allowed">
+              ← Previous Step
+            </button>
+            <span id="step-indicator" class="text-xs font-mono font-bold text-slate-400">Step 1 of 3</span>
+            <button id="next-btn" onclick="nextStep()" class="text-xs font-bold px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black cursor-pointer transition-colors">
+              Next Step →
+            </button>
+          </div>
+
         </div>
 
       </div>
@@ -300,265 +495,195 @@
     </div>
   </section>
 
-
-  <!-- ========================================== -->
-  <!-- VIEW 2: 3-STEP 3D WALKTHROUGH DEMO VIEW -->
-  <!-- ========================================== -->
-  <section id="view-3d" class="hidden flex-1 flex overflow-hidden relative">
-    
-    <!-- LEFT: 3D THREE.JS CANVAS -->
-    <div class="flex-1 flex flex-col relative bg-gradient-to-b from-[#faf8f5] to-[#f0eae1] overflow-hidden">
-      <!-- Three.js Container -->
-      <div id="three-container" class="w-full flex-1 cursor-grab active:cursor-grabbing"></div>
-
-      <!-- 3D Legend & Controls Overlay -->
-      <div class="absolute top-4 left-4 z-20 flex flex-col gap-2 pointer-events-none">
-        <div class="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#e5dfd3] shadow-xs text-xs pointer-events-auto flex items-center gap-3">
-          <div class="flex items-center gap-1.5">
-            <span class="w-3 h-3 rounded-sm bg-emerald-600 inline-block border border-emerald-700"></span>
-            <span class="font-semibold text-[#3d3832]">Sanctioned (10 Floors / 30m)</span>
-          </div>
-          <div id="legend-violation" class="hidden flex items-center gap-1.5">
-            <span class="w-3 h-3 rounded-sm bg-rose-600 inline-block border border-rose-700"></span>
-            <span class="font-bold text-rose-700">Unapproved Floors 11 & 12 (+6m)</span>
-          </div>
-        </div>
-
-        <div class="bg-white/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#e5dfd3] shadow-xs text-[11px] text-[#78716c] pointer-events-auto">
-          💡 Click and drag with mouse to orbit around the 3D model
-        </div>
-      </div>
-
-      <!-- Step Navigation Pills in Top Center -->
-      <div class="absolute top-4 right-4 z-20 flex items-center bg-white/95 backdrop-blur-md p-1 rounded-xl border border-[#e2dcce] shadow-xs">
-        <button id="step-btn-1" onclick="setStep(1)" class="px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#166534] shadow-xs">
-          <span class="w-4 h-4 rounded-full bg-[#166534] text-white text-[10px] flex items-center justify-center font-bold">1</span>
-          <span>1. Simple 3D Model</span>
-        </button>
-        <button id="step-btn-2" onclick="setStep(2)" class="px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]">
-          <span class="w-4 h-4 rounded-full bg-[#991b1b] text-white text-[10px] flex items-center justify-center font-bold">2</span>
-          <span>2. Check Approvals</span>
-        </button>
-        <button id="step-btn-3" onclick="setStep(3)" class="px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]">
-          <span class="w-4 h-4 rounded-full bg-[#4338ca] text-white text-[10px] flex items-center justify-center font-bold">3</span>
-          <span>3. Running History</span>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- RIGHT: STEP DETAILS & ACTIONS PANEL -->
-    <div class="w-[440px] bg-white border-l border-[#e8e2d8] flex flex-col justify-between overflow-y-auto shrink-0 shadow-xs z-30">
+  <!-- ============================================== -->
+  <!-- SECTION: CADASTRAL MAP LOCATOR                 -->
+  <!-- ============================================== -->
+  <section id="map-locator" class="py-20 px-6 bg-[#0f1523] border-t border-slate-800/60">
+    <div class="max-w-7xl mx-auto space-y-8">
       
-      <!-- STEP 1 CONTENT -->
-      <div id="step-panel-1" class="p-6 space-y-5">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-              Step 1: 3D Reconstruction
-            </span>
-            <span class="text-xs font-semibold text-[#8c8275]">From Floor Plan</span>
-          </div>
-          <h3 class="text-lg font-extrabold text-[#1c1917]">Sanctioned Plan Ingestion</h3>
-          <p class="text-xs text-[#6e665d] leading-relaxed">
-            Municipal authorities already possess sanctioned architectural blueprints. GeoParcel ingests the floor plan and automatically generates an accurate 3D volumetric model.
-          </p>
-        </div>
-
-        <!-- Architectural Blueprint Dossier -->
-        <div class="border border-[#e2dcce] rounded-xl p-4 bg-[#faf8f5] space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#4a443d] flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              Sanctioned Plan #CMDA-2021-084
-            </span>
-            <span class="text-[10px] font-mono font-bold px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded border border-emerald-200">
-              APPROVED
-            </span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
-              <span class="text-[#8c8275] block text-[10px]">Sanctioned Height</span>
-              <strong class="text-sm text-[#2c2825]">30.0 Meters</strong>
-            </div>
-            <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
-              <span class="text-[#8c8275] block text-[10px]">Approved Floors</span>
-              <strong class="text-sm text-[#2c2825]">10 Floors (G + 9)</strong>
-            </div>
-            <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
-              <span class="text-[#8c8275] block text-[10px]">Base Cadastral ULPIN</span>
-              <strong id="step1-ulpin" class="text-xs font-mono text-[#2c2825]">14A7B9C23D45E1</strong>
-            </div>
-            <div class="bg-white p-2.5 rounded-lg border border-[#e8e2d8]">
-              <span class="text-[#8c8275] block text-[10px]">Parking Allocation</span>
-              <strong class="text-xs text-[#2c2825]">Basement (Allotted)</strong>
-            </div>
-          </div>
-
-          <!-- Animated Extrusion Counter -->
-          <div class="p-3 bg-white rounded-lg border border-[#e8e2d8] space-y-2">
-            <div class="flex justify-between text-xs font-semibold">
-              <span class="text-[#4a443d]">3D Volumetric Extrusion:</span>
-              <span id="extrusion-counter" class="text-emerald-700 font-bold">10 of 10 Floors Extruded</span>
-            </div>
-            <div class="w-full bg-[#f0ede6] h-2 rounded-full overflow-hidden">
-              <div id="extrusion-bar" class="bg-emerald-600 h-full transition-all duration-300 rounded-full" style="width: 100%"></div>
-            </div>
-          </div>
-
-          <button onclick="replayExtrusion()" class="w-full py-2 px-3 rounded-lg border border-[#d8d2c4] hover:bg-[#efece4] text-xs font-semibold text-[#4a443d] flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-            Replay 3D Extrusion
-          </button>
-        </div>
-
-        <div class="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-1.5 text-xs">
-          <div class="flex items-center gap-1.5 text-emerald-900 font-bold">
-            <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-            Zero Manual 3D Work Required
-          </div>
-          <p class="text-emerald-950 leading-relaxed text-[11px]">
-            By directly pulling floor counts, setback boundaries, and floor heights from existing sanctioned municipal files, an accurate 3D digital twin is constructed instantly.
-          </p>
-        </div>
-      </div>
-
-      <!-- STEP 2 CONTENT -->
-      <div id="step-panel-2" class="hidden p-6 space-y-5">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">
-              Step 2: Automated Audit
-            </span>
-            <span class="text-xs font-semibold text-[#8c8275]">Approval Verification</span>
-          </div>
-          <h3 class="text-lg font-extrabold text-[#1c1917]">Automated Discrepancy Detection</h3>
-          <p class="text-xs text-[#6e665d] leading-relaxed">
-            When drone or satellite survey scans are updated, the system checks the as-built model against the sanctioned boundary. If anything doesn't match, it is flagged immediately.
-          </p>
-        </div>
-
-        <!-- Automatic Flag Alert Box -->
-        <div class="border border-rose-200 bg-rose-50/80 rounded-xl p-4 space-y-3">
-          <div class="flex items-center gap-2 text-rose-900 font-bold text-sm">
-            <svg class="w-4 h-4 text-rose-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            <span>Critical Discrepancy Flagged!</span>
-          </div>
-
-          <!-- Height Exceeded -->
-          <div class="bg-white p-3 rounded-lg border border-rose-200 shadow-2xs space-y-1">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-rose-950">
-                Unapproved Extra Floors (+6.0m)
-              </span>
-              <span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-rose-600 text-white">
-                VIOLATION
-              </span>
-            </div>
-            <p class="text-[11px] text-[#6e665d] leading-relaxed">
-              Permitted: <strong>30.0m (10 floors)</strong>. As-built scan: <strong>36.0m (12 floors)</strong>. Two unauthorized penthouse floors built on rooftop.
-            </p>
-            <div class="text-[11px] font-mono text-rose-700 bg-rose-50 p-1.5 rounded border border-rose-100">
-              Flagged Units: Floor 11 (U1101, U1102) & Floor 12 (U1201, U1202)
-            </div>
-          </div>
-
-          <!-- Boundary Encroachment -->
-          <div class="bg-white p-3 rounded-lg border border-rose-200 shadow-2xs space-y-1">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-rose-950">
-                Setback Margin Encroachment
-              </span>
-              <span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-amber-600 text-white">
-                2.0m OVERHANG
-              </span>
-            </div>
-            <p class="text-[11px] text-[#6e665d] leading-relaxed">
-              Cantilever balcony protrudes 2 meters beyond sanctioned cadastral boundary line into the street buffer.
-            </p>
-          </div>
-        </div>
-
-        <button onclick="triggerLaserScan()" class="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-          Run Live Spatial Audit Scan
-        </button>
-
-        <div class="p-3 bg-[#faf8f5] rounded-lg border border-[#e2dcce] text-[11px] text-[#78716c] leading-relaxed">
-          <strong>Autonomous municipal oversight:</strong> No corrupt paperwork or missed inspections. The digital twin automatically compares reality against the legal permit.
-        </div>
-      </div>
-
-      <!-- STEP 3 CONTENT -->
-      <div id="step-panel-3" class="hidden p-6 space-y-5">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
-              Step 3: Temporal Memory
-            </span>
-            <span class="text-xs font-semibold text-[#8c8275]">Lifecycle History</span>
-          </div>
-          <h3 class="text-lg font-extrabold text-[#1c1917]">Memory, Not Just a Snapshot</h3>
-          <p class="text-xs text-[#6e665d] leading-relaxed">
-            A building is not static. Every building keeps a running history over time — recording approvals, construction milestones, violations, and legal title freezes.
-          </p>
-        </div>
-
-        <!-- Timeline Scrubber -->
-        <div class="space-y-2">
-          <div class="flex items-center justify-between text-xs font-bold text-[#4a443d]">
-            <span>Timeline Scrubber (2021 – Present):</span>
-            <span id="timeline-year-badge" class="text-indigo-600 font-mono font-bold">2021</span>
-          </div>
-
-          <div class="grid grid-cols-5 gap-1 bg-[#f4f1ea] p-1 rounded-xl border border-[#e2dcce]">
-            <button onclick="selectTimeline(0)" id="t-btn-0" class="py-1.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-xs">2021</button>
-            <button onclick="selectTimeline(1)" id="t-btn-1" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]">2023</button>
-            <button onclick="selectTimeline(2)" id="t-btn-2" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]">2024</button>
-            <button onclick="selectTimeline(3)" id="t-btn-3" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]">2025</button>
-            <button onclick="selectTimeline(4)" id="t-btn-4" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]">2026</button>
-          </div>
-        </div>
-
-        <!-- Active Event Details -->
-        <div id="timeline-event-card" class="border border-[#e2dcce] rounded-xl p-4 bg-[#faf8f5] space-y-3">
-          <!-- Populated by JS -->
-        </div>
-
-        <div class="p-3.5 bg-indigo-50/70 border border-indigo-200 rounded-xl space-y-1.5 text-xs">
-          <div class="flex items-center gap-1.5 text-indigo-950 font-bold">
-            <svg class="w-4 h-4 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Preventing Secondary Title Fraud
-          </div>
-          <p class="text-indigo-900 leading-relaxed text-[11px]">
-            Because the record is immutable memory, unapproved floors constructed years later can never be disguised as "original construction" during resale or bank mortgages.
-          </p>
-        </div>
-      </div>
-
-      <!-- BOTTOM NAVIGATION BAR -->
-      <div class="p-4 bg-[#faf8f5] border-t border-[#e8e2d8] flex items-center justify-between shrink-0">
-        <button id="prev-btn" onclick="prevStep()" disabled class="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors opacity-40 cursor-not-allowed border-transparent text-[#9c9184]">
-          ← Previous
-        </button>
-
-        <span id="step-indicator" class="text-xs font-extrabold text-[#78716c]">
-          1 / 3
+      <div class="max-w-3xl space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+          Spatial GIS Interface
         </span>
-
-        <button id="next-btn" onclick="nextStep()" class="flex items-center gap-1 text-xs font-bold px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition-colors cursor-pointer shadow-xs">
-          <span>Next Step</span> →
-        </button>
+        <h2 class="text-3xl sm:text-4xl font-black text-white">
+          Locate Any Building Across The City
+        </h2>
+        <p class="text-sm text-slate-300">
+          Inspect cadastral parcels in Chennai (T Nagar, Alwarpet, Adyar). Click any pin on the map to load its legal parameters and launch its 3D digital twin.
+        </p>
       </div>
+
+      <!-- Map & Sidebar Split -->
+      <div class="rounded-3xl border border-slate-800 bg-[#0c101c] shadow-2xl overflow-hidden flex flex-col lg:flex-row h-[600px]">
+        
+        <!-- Leaflet Map Container -->
+        <div class="flex-1 relative flex flex-col">
+          <div id="map-container" class="w-full flex-1"></div>
+
+          <!-- Floating Map Legend -->
+          <div class="absolute bottom-4 left-4 z-[500] bg-slate-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-800 text-xs flex items-center gap-3">
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+              <span class="text-slate-300">Compliant (10F)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+              <span class="text-slate-300">Height Breach (12F)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+              <span class="text-slate-300">Setback Encroachment</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Parcel Details & Selector -->
+        <div class="w-full lg:w-[420px] bg-[#0c111d] border-t lg:border-t-0 lg:border-l border-slate-800 p-6 flex flex-col justify-between overflow-y-auto space-y-4">
+          
+          <div>
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Cadastral Registry</h3>
+            <p class="text-xs text-slate-400 mt-0.5">Click a building card to fly to its parcel:</p>
+
+            <div id="buildings-list" class="mt-4 space-y-2.5">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Selected Property Banner -->
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <span id="banner-area" class="text-[10px] font-bold text-slate-400 uppercase block">Selected Parcel</span>
+                <h4 id="banner-name" class="text-sm font-extrabold text-white">Sunrise Apartments</h4>
+              </div>
+              <span id="banner-status-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                Compliant
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+              <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                <span class="text-[10px] text-slate-400 font-sans block">Base ULPIN</span>
+                <strong id="banner-ulpin" class="text-emerald-400 text-xs">14A7B9C23D45E1</strong>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                <span class="text-[10px] text-slate-400 font-sans block">Sanctioned</span>
+                <strong id="banner-height" class="text-slate-200 text-xs font-sans">30m (10 Floors)</strong>
+              </div>
+            </div>
+
+            <button onclick="launch3DFromMap()" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-lg shadow-emerald-500/20">
+              <span>Inspect in 3D Prototype</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   </section>
 
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT: MAP, DASHBOARD & THREE.JS LOGIC -->
-  <!-- ========================================== -->
+  <!-- ============================================== -->
+  <!-- SECTION: SYSTEM ARCHITECTURE & IMPACT          -->
+  <!-- ============================================== -->
+  <section id="architecture" class="py-20 px-6">
+    <div class="max-w-6xl mx-auto space-y-12">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+          Under The Hood
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-black text-white">
+          Why Bhu Stack Transforms Municipal Governance
+        </h2>
+        <p class="text-sm sm:text-base text-slate-400">
+          Bridging the gap between legal master plans, physical construction reality, and secondary property transactions.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <div class="p-8 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white">For Municipalities & Town Planners</h3>
+          <ul class="space-y-2.5 text-xs sm:text-sm text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span><strong>Autonomous Spatial Audits:</strong> Compare drone survey point clouds against sanctioned boundaries without manual site raids.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span><strong>Automated Penalty Notices:</strong> Generate legal violation notices with exact spatial coordinates and excess height measurements.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span><strong>Volumetric Strata Registry:</strong> Assign true 3D ULPIN codes to every vertical unit, parking allotment, and air rights.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white">For Homebuyers & Mortgage Banks</h3>
+          <ul class="space-y-2.5 text-xs sm:text-sm text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-blue-400 font-bold">✓</span>
+              <span><strong>Zero-Fraud Verification:</strong> Scan a property's ULPIN QR code to verify if the 11th or 12th floor is legally approved before buying.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-blue-400 font-bold">✓</span>
+              <span><strong>Bank Loan Due Diligence:</strong> Lenders instantly flag encumbered or unapproved floors, preventing non-performing bad mortgages.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-blue-400 font-bold">✓</span>
+              <span><strong>Immutable History:</strong> An illegal floor constructed 3 years after handover can never be disguised as "original construction."</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- FOOTER                                         -->
+  <!-- ============================================== -->
+  <footer class="border-t border-slate-800/80 bg-[#080c14] py-12 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500 text-slate-950 flex items-center justify-center font-black">
+          B
+        </div>
+        <div>
+          <span class="font-bold text-white text-sm">Bhu Stack</span>
+          <p class="text-xs text-slate-400">3D Municipal Digital Twin & Cadastral Memory Registry</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6 text-xs text-slate-400">
+        <a href="#hero" class="hover:text-white transition-colors">Top</a>
+        <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
+        <a href="#interactive-prototype" class="hover:text-white transition-colors">3D Prototype</a>
+        <a href="#map-locator" class="hover:text-white transition-colors">Cadastral Map</a>
+        <a href="http://localhost:3000/" target="_blank" class="text-emerald-400 hover:underline">Launch Full App ↗</a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ============================================== -->
+  <!-- JAVASCRIPT LOGIC                               -->
+  <!-- ============================================== -->
   <script>
-    // Building Data matching municipal database
+    // Cadastral database
     const BUILDINGS_DATABASE = [
       {
         id: 'sunrise-apartments',
@@ -571,10 +696,10 @@
         floorsCount: 10,
         status: 'compliant',
         statusLabel: 'Fully Compliant',
-        badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        badgeColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
         markerClass: 'marker-compliant',
         parking: 'Basement (6 slots)',
-        description: '10-storey residential community in T Nagar with basement parking and strictly compliant footprint.'
+        desc: '10-storey residential community in T Nagar with basement parking and compliant footprint.'
       },
       {
         id: 'palm-residency',
@@ -587,10 +712,10 @@
         floorsCount: 12,
         status: 'violation',
         statusLabel: 'Height Breach (+6m)',
-        badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
+        badgeColor: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
         markerClass: 'marker-height-violation',
         parking: 'Surface Lot (8 slots)',
-        description: '12-storey development in Alwarpet exceeding sanctioned master plan limit by 2 unapproved penthouse floors.'
+        desc: '12-storey development in Alwarpet exceeding sanctioned master plan limit by 2 unapproved penthouse floors.'
       },
       {
         id: 'garden-view-towers',
@@ -603,33 +728,25 @@
         floorsCount: 9,
         status: 'encroachment',
         statusLabel: 'Boundary Encroachment',
-        badgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+        badgeColor: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
         markerClass: 'marker-encroachment',
         parking: 'Basement (10 slots)',
-        description: '9-storey residential complex in Adyar protruding 2 meters past registered cadastral property boundary.'
+        desc: '9-storey residential complex in Adyar protruding 2 meters past registered property boundary.'
       }
     ];
 
     let selectedBuilding = BUILDINGS_DATABASE[0];
-    let activeFilter = 'all';
     let leafletMap = null;
     let mapMarkers = [];
 
-    // 3D Walkthrough state
-    let currentStep = 1;
-    let isPlaying = false;
-    let playInterval = null;
-    let currentTimelineIdx = 0;
-    let isScanning = false;
-    let extrudedCount = 10;
-
+    // Timeline Data for Step 3
     const timelineData = [
       {
         year: '2021',
         date: 'March 14, 2021',
         title: 'Sanctioned Master Plan Approved',
         badge: 'Sanctioned Permit',
-        badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        badgeColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
         floors: 10,
         hasViolation: false,
         desc: 'Municipal planning authority grants building permit for 10 residential floors (30m max) with basement parking. Base ULPIN assigned.'
@@ -639,7 +756,7 @@
         date: 'January 10, 2023',
         title: 'As-Built Physical Completion',
         badge: 'Compliant Handover',
-        badgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+        badgeColor: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
         floors: 10,
         hasViolation: false,
         desc: 'Construction completed adhering to sanctioned 30m height limit. Occupancy certificate issued and cadastral survey matches 100%.'
@@ -649,7 +766,7 @@
         date: 'August 22, 2024',
         title: 'Unauthorized Vertical Extension Added',
         badge: 'Violation Flagged',
-        badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
+        badgeColor: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
         floors: 12,
         hasViolation: true,
         desc: 'Drone telemetry registers 2 additional penthouse levels (+6m) without municipal approval. Digital twin automatically files discrepancy.'
@@ -659,7 +776,7 @@
         date: 'April 05, 2025',
         title: 'Strata Encumbrance & Title Freeze',
         badge: 'Legal Action',
-        badgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+        badgeColor: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
         floors: 12,
         hasViolation: true,
         desc: 'Municipal registry places public legal redline on Floors 11 & 12. Banks and prospective buyers scanning the ULPIN QR are immediately alerted.'
@@ -669,7 +786,7 @@
         date: 'Present Day (Live)',
         title: 'Continuous Memory & Public Audit',
         badge: 'Immutable Record',
-        badgeColor: 'bg-purple-100 text-purple-800 border-purple-300',
+        badgeColor: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
         floors: 12,
         hasViolation: true,
         desc: 'Complete lifecycle memory preserved. Every change, violation, and permit modification remains verifiable forever.'
@@ -682,220 +799,24 @@
     let isUserInteracting = false;
     let scanY = 0;
     let scanDirection = 1;
-
-    // View Switcher (Dashboard Map vs 3D Walkthrough)
-    function switchView(view) {
-      const viewDash = document.getElementById('view-dashboard');
-      const view3D = document.getElementById('view-3d');
-      const tabDash = document.getElementById('view-tab-dashboard');
-      const tab3D = document.getElementById('view-tab-3d');
-      const autoPlayBtn = document.getElementById('autoplay-btn');
-
-      if (view === 'dashboard') {
-        viewDash.classList.remove('hidden');
-        view3D.classList.add('hidden');
-        autoPlayBtn.classList.add('hidden');
-
-        tabDash.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#166534] shadow-xs cursor-pointer';
-        tab3D.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917] cursor-pointer';
-
-        if (leafletMap) {
-          setTimeout(() => { leafletMap.invalidateSize(); }, 200);
-        }
-      } else {
-        viewDash.classList.add('hidden');
-        view3D.classList.remove('hidden');
-        autoPlayBtn.classList.remove('hidden');
-
-        tab3D.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-[#4338ca] shadow-xs cursor-pointer';
-        tabDash.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917] cursor-pointer';
-
-        if (!scene) initThree();
-        setStep(1);
-      }
-    }
-
-    // Initialize Leaflet Map
-    function initLeafletMap() {
-      if (leafletMap) return;
-
-      // Center around Chennai T Nagar / Alwarpet
-      leafletMap = L.map('map-container', {
-        zoomControl: false
-      }).setView([13.042, 80.238], 13);
-
-      L.control.zoom({ position: 'bottomright' }).addTo(leafletMap);
-
-      // Standard Free OpenStreetMap Tiles (100% Reliable, Zero API Key Required)
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19
-      }).addTo(leafletMap);
-
-      setTimeout(() => {
-        leafletMap.invalidateSize();
-      }, 150);
-
-      renderMapMarkers();
-      renderBuildingsList();
-      updateSelectedBanner(selectedBuilding);
-    }
-
-    function renderMapMarkers() {
-      // Clear existing
-      mapMarkers.forEach(m => leafletMap.removeLayer(m));
-      mapMarkers = [];
-
-      BUILDINGS_DATABASE.forEach(b => {
-        if (activeFilter === 'compliant' && b.status !== 'compliant') return;
-        if (activeFilter === 'violation' && b.status === 'compliant') return;
-
-        // Custom HTML Marker Icon
-        const icon = L.divIcon({
-          className: '',
-          html: `<div class="custom-marker ${b.markerClass} w-8 h-8 text-xs flex items-center justify-center font-bold">
-                   <span>${b.floorsCount}F</span>
-                 </div>`,
-          iconSize: [32, 32],
-          iconAnchor: [16, 16]
-        });
-
-        const marker = L.marker([b.lat, b.lng], { icon }).addTo(leafletMap);
-
-        marker.on('click', () => {
-          selectBuilding(b);
-        });
-
-        // Popup
-        marker.bindPopup(`
-          <div class="p-1 space-y-1 text-xs">
-            <strong class="font-bold text-sm block">${b.name}</strong>
-            <span class="text-[11px] text-[#78716c] block">${b.area} • ULPIN: <code class="font-mono text-[10px]">${b.baseUlpin}</code></span>
-            <div class="pt-1 flex items-center justify-between">
-              <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${b.badgeColor}">${b.statusLabel}</span>
-              <button onclick="launch3DWalkthrough('${b.id}')" class="text-[10px] font-bold text-emerald-800 underline cursor-pointer">Inspect 3D ➔</button>
-            </div>
-          </div>
-        `);
-
-        mapMarkers.push(marker);
-      });
-    }
-
-    function renderBuildingsList() {
-      const listEl = document.getElementById('buildings-list');
-      const searchVal = document.getElementById('map-search-input').value.toLowerCase();
-
-      listEl.innerHTML = '';
-
-      const filtered = BUILDINGS_DATABASE.filter(b => {
-        const matchesSearch = b.name.toLowerCase().includes(searchVal) || b.baseUlpin.toLowerCase().includes(searchVal) || b.area.toLowerCase().includes(searchVal);
-        const matchesFilter = activeFilter === 'all' || 
-          (activeFilter === 'compliant' && b.status === 'compliant') || 
-          (activeFilter === 'violation' && b.status !== 'compliant');
-        return matchesSearch && matchesFilter;
-      });
-
-      filtered.forEach(b => {
-        const isSelected = selectedBuilding.id === b.id;
-        const item = document.createElement('div');
-        item.className = `p-3 rounded-xl border transition-all cursor-pointer ${
-          isSelected 
-            ? 'bg-[#f4fbf7] border-emerald-400 shadow-xs ring-1 ring-emerald-300' 
-            : 'bg-[#faf8f5] border-[#e8e2d8] hover:bg-[#f5f2eb]'
-        }`;
-
-        item.onclick = () => selectBuilding(b);
-
-        item.innerHTML = `
-          <div class="flex items-start justify-between gap-2">
-            <div>
-              <span class="text-[10px] font-bold text-[#8c8275] block">${b.area}</span>
-              <h4 class="font-bold text-sm text-[#1c1917]">${b.name}</h4>
-              <span class="text-[11px] font-mono text-[#5c554e] block mt-0.5">${b.baseUlpin}</span>
-            </div>
-            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full border ${b.badgeColor}">
-              ${b.statusLabel}
-            </span>
-          </div>
-          <div class="grid grid-cols-2 gap-1 text-[11px] text-[#6b6257] mt-2 pt-2 border-t border-[#ede8df]">
-            <span>Height: <strong>${b.height}m (${b.floorsCount}F)</strong></span>
-            <span>Parking: <strong>${b.parking.split(' ')[0]}</strong></span>
-          </div>
-        `;
-
-        listEl.appendChild(item);
-      });
-    }
-
-    function selectBuilding(b) {
-      selectedBuilding = b;
-      updateSelectedBanner(b);
-      renderBuildingsList();
-
-      if (leafletMap) {
-        leafletMap.flyTo([b.lat, b.lng], 15, { duration: 1.2 });
-      }
-    }
-
-    function updateSelectedBanner(b) {
-      document.getElementById('banner-name').textContent = b.name;
-      document.getElementById('banner-area').textContent = `Selected: ${b.area}`;
-      document.getElementById('banner-ulpin').textContent = b.baseUlpin;
-      document.getElementById('banner-height').textContent = `${b.height}m (${b.floorsCount} Floors)`;
-
-      const badge = document.getElementById('banner-status-badge');
-      badge.textContent = b.statusLabel;
-      badge.className = `px-2 py-0.5 text-[10px] font-bold rounded-full border ${b.badgeColor}`;
-    }
-
-    function filterBuildings() {
-      renderBuildingsList();
-      renderMapMarkers();
-    }
-
-    function setFilter(filterType) {
-      activeFilter = filterType;
-      ['all', 'compliant', 'violation'].forEach(f => {
-        const btn = document.getElementById(`filter-all`);
-        const bComp = document.getElementById(`filter-compliant`);
-        const bViol = document.getElementById(`filter-violation`);
-        if (f === filterType) {
-          if (f === 'all') btn.className = 'px-2 py-0.5 rounded-md font-bold bg-[#166534] text-white';
-          if (f === 'compliant') bComp.className = 'px-2 py-0.5 rounded-md font-bold bg-[#166534] text-white';
-          if (f === 'violation') bViol.className = 'px-2 py-0.5 rounded-md font-bold bg-[#991b1b] text-white';
-        } else {
-          if (f === 'all') btn.className = 'px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]';
-          if (f === 'compliant') bComp.className = 'px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]';
-          if (f === 'violation') bViol.className = 'px-2 py-0.5 rounded-md font-bold bg-[#efece4] text-[#4a443d] hover:bg-[#e2dcce]';
-        }
-      });
-      renderBuildingsList();
-      renderMapMarkers();
-    }
-
-    function launch3DWalkthroughForSelected() {
-      switchView('3d');
-    }
-
-    function launch3DWalkthrough(id) {
-      const b = BUILDINGS_DATABASE.find(item => item.id === id);
-      if (b) selectBuilding(b);
-      switchView('3d');
-    }
+    let currentStep = 1;
+    let isPlaying = false;
+    let playInterval = null;
+    let currentTimelineIdx = 0;
+    let isScanning = false;
 
     // -------------------------------------------------------------
-    // THREE.JS 3D RE-CONSTRUCTION & AUDIT SCAN IMPLEMENTATION
+    // THREE.JS IMPLEMENTATION
     // -------------------------------------------------------------
     function initThree() {
       const container = document.getElementById('three-container');
       if (!container || scene) return;
 
-      const width = container.clientWidth || 800;
-      const height = container.clientHeight || 520;
+      const width = container.clientWidth || 700;
+      const height = container.clientHeight || 600;
 
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xfcfbf8);
+      scene.background = new THREE.Color(0x0f1523);
 
       camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
       camera.position.set(38, 28, 48);
@@ -910,7 +831,7 @@
       container.appendChild(renderer.domElement);
 
       // Lighting
-      const ambient = new THREE.AmbientLight(0xffffff, 0.85);
+      const ambient = new THREE.AmbientLight(0xffffff, 0.9);
       scene.add(ambient);
 
       const mainLight = new THREE.DirectionalLight(0xfff5ea, 1.4);
@@ -918,20 +839,20 @@
       mainLight.castShadow = true;
       scene.add(mainLight);
 
-      const fillLight = new THREE.DirectionalLight(0xdbeafe, 0.5);
+      const fillLight = new THREE.DirectionalLight(0x38bdf8, 0.4);
       fillLight.position.set(-30, 25, -30);
       scene.add(fillLight);
 
-      // Grid Ground
-      const grid = new THREE.GridHelper(60, 30, 0xd4ccbf, 0xede8df);
+      // Ground Cadastral Grid
+      const grid = new THREE.GridHelper(60, 30, 0x1e293b, 0x0f172a);
       grid.position.y = -0.05;
       scene.add(grid);
 
-      // Cadastral Sanctioned Box Envelope (30m max height)
+      // Boundary Envelope Box (30m max height)
       const boundaryGeo = new THREE.BoxGeometry(18, 30, 18);
       const boundaryEdges = new THREE.EdgesGeometry(boundaryGeo);
       const boundaryMat = new THREE.LineDashedMaterial({
-        color: 0x3d8b57,
+        color: 0x10b981,
         dashSize: 1.2,
         gapSize: 0.8,
         linewidth: 2,
@@ -941,11 +862,11 @@
       boundaryBox.position.set(0, 15, 0);
       scene.add(boundaryBox);
 
-      // Group
+      // Building Group
       buildingGroup = new THREE.Group();
       scene.add(buildingGroup);
 
-      // Laser Scan Beam
+      // Laser Scanner Beam
       const scanGeo = new THREE.PlaneGeometry(28, 28);
       const scanMat = new THREE.MeshBasicMaterial({
         color: 0xef4444,
@@ -987,7 +908,7 @@
         renderer.setSize(newW, newH);
       });
 
-      // Render Loop
+      // Animation Loop
       function animate() {
         requestAnimationFrame(animate);
 
@@ -1027,7 +948,7 @@
 
       // Base Podium
       const baseGeo = new THREE.BoxGeometry(floorW + 2, 0.8, floorD + 2);
-      const baseMat = new THREE.MeshStandardMaterial({ color: 0xded8ce, roughness: 0.8 });
+      const baseMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.8 });
       const baseMesh = new THREE.Mesh(baseGeo, baseMat);
       baseMesh.position.y = 0.4;
       buildingGroup.add(baseMesh);
@@ -1045,15 +966,15 @@
             roughness: 0.3,
             metalness: 0.1,
             emissive: 0x991b1b,
-            emissiveIntensity: 0.65,
+            emissiveIntensity: 0.7,
             transparent: true,
             opacity: 0.95
           });
         } else if (isIllegal && !highlightViolation) {
-          floorMat = new THREE.MeshStandardMaterial({ color: 0xfca5a5, roughness: 0.5 });
+          floorMat = new THREE.MeshStandardMaterial({ color: 0xf87171, roughness: 0.5 });
         } else {
           floorMat = new THREE.MeshStandardMaterial({
-            color: f % 2 === 0 ? 0xffffff : 0xf4f1eb,
+            color: f % 2 === 0 ? 0xf8fafc : 0xe2e8f0,
             roughness: 0.4,
             metalness: 0.05
           });
@@ -1064,20 +985,20 @@
         floorMesh.castShadow = true;
         buildingGroup.add(floorMesh);
 
-        // Slab
+        // Floor slab
         const slabGeo = new THREE.BoxGeometry(floorW + 0.6, 0.25, floorD + 0.6);
         const slabMat = new THREE.MeshStandardMaterial({
-          color: isIllegal && highlightViolation ? 0x991b1b : 0xc8c0b2,
+          color: isIllegal && highlightViolation ? 0x991b1b : 0x334155,
           roughness: 0.9
         });
         const slabMesh = new THREE.Mesh(slabGeo, slabMat);
         slabMesh.position.set(0, 0.8 + f * floorH - 0.125, 0);
         buildingGroup.add(slabMesh);
 
-        // Window Glass Band
+        // Glass windows
         const glassGeo = new THREE.BoxGeometry(floorW + 0.05, floorH * 0.4, floorD + 0.05);
         const glassMat = new THREE.MeshStandardMaterial({
-          color: isIllegal && highlightViolation ? 0xfca5a5 : 0x7dd3fc,
+          color: isIllegal && highlightViolation ? 0xfca5a5 : 0x38bdf8,
           roughness: 0.1,
           metalness: 0.8,
           transparent: true,
@@ -1097,7 +1018,7 @@
       const interval = setInterval(() => {
         count += 1;
         renderBuilding(count, false);
-        if (counterEl) counterEl.textContent = `${count} of 10 Floors Extruded`;
+        if (counterEl) counterEl.textContent = `${count} of 10 Floors`;
         if (barEl) barEl.style.width = `${(count / 10) * 100}%`;
         if (count >= 10) clearInterval(interval);
       }, 160);
@@ -1115,17 +1036,15 @@
     function setStep(step) {
       currentStep = step;
 
-      // Update Step Tabs
+      // Update Step buttons
       for (let s = 1; s <= 3; s++) {
         const btn = document.getElementById(`step-btn-${s}`);
         const panel = document.getElementById(`step-panel-${s}`);
         if (s === step) {
-          btn.className = `px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white shadow-xs ${
-            step === 1 ? 'text-[#166534]' : step === 2 ? 'text-[#b91c1c]' : 'text-[#4338ca]'
-          }`;
+          btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-emerald-500 text-slate-950 shadow-sm cursor-pointer';
           panel.classList.remove('hidden');
         } else {
-          btn.className = 'px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-[#6b6257] hover:text-[#1c1917]';
+          btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white cursor-pointer';
           panel.classList.add('hidden');
         }
       }
@@ -1135,13 +1054,13 @@
       const nextBtn = document.getElementById('next-btn');
       const indicator = document.getElementById('step-indicator');
 
-      indicator.textContent = `${step} / 3`;
+      indicator.textContent = `Step ${step} of 3`;
 
       if (step === 1) {
         legendViol.classList.add('hidden');
         prevBtn.disabled = true;
-        prevBtn.className = 'flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors opacity-40 cursor-not-allowed border-transparent text-[#9c9184]';
-        nextBtn.innerHTML = '<span>Next Step</span> →';
+        prevBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-500 cursor-not-allowed';
+        nextBtn.innerHTML = 'Next Step →';
         nextBtn.onclick = nextStep;
         isScanning = false;
         if (scanMesh) scanMesh.material.opacity = 0;
@@ -1149,15 +1068,15 @@
       } else if (step === 2) {
         legendViol.classList.remove('hidden');
         prevBtn.disabled = false;
-        prevBtn.className = 'flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg border bg-white border-[#ded8cb] hover:bg-[#efece4] text-[#4a443d] cursor-pointer';
-        nextBtn.innerHTML = '<span>Next Step</span> →';
+        prevBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 cursor-pointer';
+        nextBtn.innerHTML = 'Next Step →';
         nextBtn.onclick = nextStep;
         renderBuilding(12, true);
         triggerLaserScan();
       } else if (step === 3) {
         prevBtn.disabled = false;
-        prevBtn.className = 'flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg border bg-white border-[#ded8cb] hover:bg-[#efece4] text-[#4a443d] cursor-pointer';
-        nextBtn.innerHTML = '<span>Replay Demo</span> ↺';
+        prevBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 cursor-pointer';
+        nextBtn.innerHTML = '↺ Replay Step 1';
         nextBtn.onclick = () => setStep(1);
         selectTimeline(currentTimelineIdx);
       }
@@ -1178,9 +1097,9 @@
       for (let i = 0; i < 5; i++) {
         const btn = document.getElementById(`t-btn-${i}`);
         if (i === idx) {
-          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-xs';
+          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white cursor-pointer';
         } else {
-          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#eae6dc]';
+          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white cursor-pointer';
         }
       }
 
@@ -1190,23 +1109,23 @@
       card.innerHTML = `
         <div class="flex items-start justify-between gap-2">
           <div>
-            <span class="text-[11px] font-mono text-[#8c8275] block">${ev.date}</span>
-            <h4 class="font-bold text-sm text-[#1c1917] mt-0.5">${ev.title}</h4>
+            <span class="text-[10px] font-mono text-slate-400 block">${ev.date}</span>
+            <h4 class="font-bold text-sm text-white mt-0.5">${ev.title}</h4>
           </div>
           <span class="px-2 py-0.5 text-[10px] font-bold rounded-full border ${ev.badgeColor}">
             ${ev.badge}
           </span>
         </div>
-        <p class="text-xs text-[#5e564d] leading-relaxed">${ev.desc}</p>
+        <p class="text-xs text-slate-300 leading-relaxed">${ev.desc}</p>
         <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
-          <div class="bg-white p-2 rounded-lg border border-[#e8e2d8]">
-            <span class="text-[#8c8275] block text-[10px]">Physical State:</span>
-            <strong class="text-[#2c2825]">${ev.floors} Floors Built</strong>
+          <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+            <span class="text-slate-400 block text-[10px]">Physical State:</span>
+            <strong class="text-white">${ev.floors} Floors Built</strong>
           </div>
-          <div class="bg-white p-2 rounded-lg border border-[#e8e2d8]">
-            <span class="text-[#8c8275] block text-[10px]">Compliance State:</span>
-            <strong class="${ev.hasViolation ? 'text-rose-700 font-bold' : 'text-emerald-700 font-bold'}">
-              ${ev.hasViolation ? 'Violation Flagged' : '100% Compliant'}
+          <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+            <span class="text-slate-400 block text-[10px]">Audit Status:</span>
+            <strong class="${ev.hasViolation ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}">
+              ${ev.hasViolation ? 'Violation Logged' : '100% Compliant'}
             </strong>
           </div>
         </div>
@@ -1222,8 +1141,8 @@
       const icon = document.getElementById('play-icon');
 
       if (isPlaying) {
-        btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 shadow-sm';
-        text.textContent = 'Pause Tour';
+        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white flex items-center gap-2 shadow-lg shadow-rose-600/20 cursor-pointer transition-all';
+        text.textContent = 'Pause Auto Demo';
         icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
 
         playInterval = setInterval(() => {
@@ -1233,18 +1152,135 @@
             toggleAutoPlay();
             setStep(1);
           }
-        }, 9000);
+        }, 8500);
       } else {
-        btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700 shadow-sm';
-        text.textContent = 'Auto-Play 3D Demo';
+        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer transition-all';
+        text.textContent = 'Auto-Play Video Demo';
         icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
         if (playInterval) clearInterval(playInterval);
       }
     }
 
-    // Initialize on page load
+    // -------------------------------------------------------------
+    // LEAFLET MAP IMPLEMENTATION
+    // -------------------------------------------------------------
+    function initLeafletMap() {
+      if (leafletMap) return;
+
+      leafletMap = L.map('map-container', { zoomControl: false }).setView([13.042, 80.238], 13);
+      L.control.zoom({ position: 'bottomright' }).addTo(leafletMap);
+
+      // OpenStreetMap Public Tiles (100% Reliable, Zero Key Required)
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(leafletMap);
+
+      setTimeout(() => { leafletMap.invalidateSize(); }, 200);
+
+      renderMapMarkers();
+      renderBuildingsList();
+      updateSelectedBanner(selectedBuilding);
+    }
+
+    function renderMapMarkers() {
+      mapMarkers.forEach(m => leafletMap.removeLayer(m));
+      mapMarkers = [];
+
+      BUILDINGS_DATABASE.forEach(b => {
+        const icon = L.divIcon({
+          className: '',
+          html: `<div class="custom-marker ${b.markerClass} w-8 h-8 text-xs flex items-center justify-center font-bold">
+                   <span>${b.floorsCount}F</span>
+                 </div>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        });
+
+        const marker = L.marker([b.lat, b.lng], { icon }).addTo(leafletMap);
+        marker.on('click', () => { selectBuilding(b); });
+
+        marker.bindPopup(`
+          <div class="p-1 space-y-1 text-xs">
+            <strong class="font-bold text-sm block">${b.name}</strong>
+            <span class="text-[11px] text-slate-500 block">${b.area} • ULPIN: <code class="font-mono">${b.baseUlpin}</code></span>
+            <div class="pt-1 flex items-center justify-between">
+              <span class="font-bold text-emerald-700">${b.statusLabel}</span>
+              <a href="#interactive-prototype" onclick="selectBuilding('${b.id}')" class="text-xs font-bold text-blue-600 underline">Inspect 3D ➔</a>
+            </div>
+          </div>
+        `);
+
+        mapMarkers.push(marker);
+      });
+    }
+
+    function renderBuildingsList() {
+      const listEl = document.getElementById('buildings-list');
+      listEl.innerHTML = '';
+
+      BUILDINGS_DATABASE.forEach(b => {
+        const isSelected = selectedBuilding.id === b.id;
+        const item = document.createElement('div');
+        item.className = `p-3 rounded-xl border transition-all cursor-pointer ${
+          isSelected 
+            ? 'bg-slate-800 border-emerald-500/80 shadow-md ring-1 ring-emerald-500/40' 
+            : 'bg-slate-900/60 border-slate-800 hover:bg-slate-800/60'
+        }`;
+
+        item.onclick = () => selectBuilding(b);
+
+        item.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 block">${b.area}</span>
+              <h4 class="font-bold text-sm text-white">${b.name}</h4>
+              <span class="text-[11px] font-mono text-emerald-400 block mt-0.5">${b.baseUlpin}</span>
+            </div>
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full border ${b.badgeColor}">
+              ${b.statusLabel}
+            </span>
+          </div>
+        `;
+
+        listEl.appendChild(item);
+      });
+    }
+
+    function selectBuilding(b) {
+      if (typeof b === 'string') {
+        b = BUILDINGS_DATABASE.find(item => item.id === b) || selectedBuilding;
+      }
+      selectedBuilding = b;
+      updateSelectedBanner(b);
+      renderBuildingsList();
+
+      if (leafletMap) {
+        leafletMap.flyTo([b.lat, b.lng], 15, { duration: 1.2 });
+      }
+    }
+
+    function updateSelectedBanner(b) {
+      document.getElementById('banner-name').textContent = b.name;
+      document.getElementById('banner-area').textContent = `Selected: ${b.area}`;
+      document.getElementById('banner-ulpin').textContent = b.baseUlpin;
+      document.getElementById('banner-height').textContent = `${b.height}m (${b.floorsCount} Floors)`;
+
+      const badge = document.getElementById('banner-status-badge');
+      badge.textContent = b.statusLabel;
+      badge.className = `px-2 py-0.5 text-[10px] font-bold rounded-full border ${b.badgeColor}`;
+    }
+
+    function launch3DFromMap() {
+      const target = document.getElementById('interactive-prototype');
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Initialize on boot
     window.addEventListener('DOMContentLoaded', () => {
+      initThree();
       initLeafletMap();
+      setStep(1);
     });
   </script>
 </body>
