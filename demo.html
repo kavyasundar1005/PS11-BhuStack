@@ -284,14 +284,6 @@
             Interact with the actual 3D digital twin engine below. Orbit with your mouse, test automated audit scans, and scrub the history.
           </p>
         </div>
-
-        <!-- Auto-Play Demo Toggle for Videos -->
-        <div class="flex items-center gap-2">
-          <button id="autoplay-btn" onclick="toggleAutoPlay()" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer transition-all">
-            <svg id="play-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span id="play-text">Auto-Play Video Demo</span>
-          </button>
-        </div>
       </div>
 
       <!-- Prototype Interactive Container -->
@@ -1132,33 +1124,6 @@
       `;
 
       renderBuilding(ev.floors, ev.hasViolation);
-    }
-
-    function toggleAutoPlay() {
-      isPlaying = !isPlaying;
-      const btn = document.getElementById('autoplay-btn');
-      const text = document.getElementById('play-text');
-      const icon = document.getElementById('play-icon');
-
-      if (isPlaying) {
-        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white flex items-center gap-2 shadow-lg shadow-rose-600/20 cursor-pointer transition-all';
-        text.textContent = 'Pause Auto Demo';
-        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-
-        playInterval = setInterval(() => {
-          if (currentStep === 1) setStep(2);
-          else if (currentStep === 2) setStep(3);
-          else {
-            toggleAutoPlay();
-            setStep(1);
-          }
-        }, 8500);
-      } else {
-        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer transition-all';
-        text.textContent = 'Auto-Play Video Demo';
-        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-        if (playInterval) clearInterval(playInterval);
-      }
     }
 
     // -------------------------------------------------------------
