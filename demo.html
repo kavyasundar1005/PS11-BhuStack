@@ -19,25 +19,12 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #141210;
-      color: #f5f0eb;
+      background-color: #faf8f5;
+      color: #24201c;
       overflow-x: hidden;
     }
     code, pre {
       font-family: 'JetBrains Mono', monospace;
-    }
-    .gradient-text {
-      background: linear-gradient(135deg, #fbbf24, #f59e0b, #10b981);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .gradient-amber {
-      background: linear-gradient(135deg, #fbbf24, #d97706);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .glow-card {
-      box-shadow: 0 0 40px rgba(245, 158, 11, 0.08);
     }
     .custom-marker {
       display: flex;
@@ -46,77 +33,77 @@
       border-radius: 9999px;
       color: white;
       font-weight: bold;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
       transition: transform 0.2s ease;
       cursor: pointer;
     }
     .custom-marker:hover {
-      transform: scale(1.2);
+      transform: scale(1.18);
     }
     .marker-compliant {
-      background: linear-gradient(135deg, #10b981, #047857);
+      background: #166534;
       border: 2px solid #ffffff;
     }
     .marker-height-violation {
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      background: #dc2626;
       border: 2px solid #ffffff;
     }
     .marker-encroachment {
-      background: linear-gradient(135deg, #f59e0b, #b45309);
+      background: #d97706;
       border: 2px solid #ffffff;
     }
-    /* Custom scrollbar in warm bronze */
+    /* Simple clean scrollbar */
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #1c1917;
+      background: #f0ebe1;
     }
     ::-webkit-scrollbar-thumb {
-      background: #3b3530;
+      background: #d4ccbf;
       border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #574e47;
+      background: #b8ad9e;
     }
   </style>
 </head>
-<body class="bg-[#141210] text-[#f5f0eb] antialiased">
+<body class="bg-[#faf8f5] text-[#24201c] antialiased">
 
   <!-- NAVBAR -->
-  <nav class="sticky top-0 z-50 bg-[#141210]/95 backdrop-blur-md border-b border-[#2d2823] px-6 py-4">
+  <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#e8e2d8] px-6 py-3.5 shadow-2xs">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
       
       <!-- Brand Logo -->
       <a href="#hero" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-amber-500 to-emerald-500 text-[#141210] flex items-center justify-center font-black shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
-          <svg class="w-5 h-5 text-[#141210]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+        <div class="w-10 h-10 rounded-xl bg-[#166534] text-white flex items-center justify-center font-black shadow-xs group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <span class="font-black text-lg tracking-tight text-white">Bhu Stack</span>
-            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/25">
+            <span class="font-extrabold text-lg tracking-tight text-[#1a1714]">Bhu Stack</span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#ecfdf5] text-[#166534] border border-[#a7f3d0]">
               Prototype
             </span>
           </div>
-          <p class="text-[11px] text-stone-400">Municipal 3D Digital Twin & Temporal Cadastre</p>
+          <p class="text-[11px] text-[#786f65]">Municipal 3D Digital Twin & Temporal Cadastre</p>
         </div>
       </a>
 
       <!-- Nav Links -->
-      <div class="hidden md:flex items-center gap-8 text-xs font-semibold text-stone-300">
-        <a href="#how-it-works" class="hover:text-amber-400 transition-colors">How It Works</a>
-        <a href="#interactive-prototype" class="hover:text-amber-400 transition-colors">Interactive 3D Demo</a>
-        <a href="#map-locator" class="hover:text-amber-400 transition-colors">Cadastral Map</a>
-        <a href="#architecture" class="hover:text-amber-400 transition-colors">System Architecture</a>
+      <div class="hidden md:flex items-center gap-8 text-xs font-semibold text-[#5c534a]">
+        <a href="#how-it-works" class="hover:text-[#166534] transition-colors">How It Works</a>
+        <a href="#interactive-prototype" class="hover:text-[#166534] transition-colors">Interactive 3D Demo</a>
+        <a href="#map-locator" class="hover:text-[#166534] transition-colors">Cadastral Map</a>
+        <a href="#architecture" class="hover:text-[#166534] transition-colors">System Architecture</a>
       </div>
 
       <!-- Action Buttons -->
       <div class="flex items-center gap-3">
-        <a href="#interactive-prototype" class="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-[#141210] shadow-md shadow-amber-500/20 transition-all">
+        <a href="#interactive-prototype" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#166534] hover:bg-[#14532d] text-white shadow-xs transition-all">
           Try Live Prototype ↓
         </a>
-        <a href="http://localhost:3000/" target="_blank" class="hidden sm:flex text-xs px-3.5 py-2 rounded-xl border border-stone-700 bg-stone-900/90 hover:bg-stone-800 text-stone-200 font-semibold transition-colors items-center gap-1.5">
+        <a href="http://localhost:3000/" target="_blank" class="hidden sm:flex text-xs px-3.5 py-2 rounded-xl border border-[#ded8cb] bg-[#f9f7f2] hover:bg-[#efece4] text-[#4a443d] font-semibold transition-colors items-center gap-1">
           <span>Main App ↗</span>
         </a>
       </div>
@@ -127,59 +114,55 @@
   <!-- ============================================== -->
   <!-- HERO SECTION                                   -->
   <!-- ============================================== -->
-  <section id="hero" class="relative pt-20 pb-28 px-6 overflow-hidden">
-    <!-- Ambient Warm Glows (Zero Blue) -->
-    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-amber-500/10 blur-[130px] rounded-full pointer-events-none"></div>
-    <div class="absolute top-1/3 left-1/4 w-[400px] h-[300px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none"></div>
-
-    <div class="max-w-5xl mx-auto text-center space-y-6 relative z-10">
+  <section id="hero" class="relative pt-16 pb-24 px-6 bg-gradient-to-b from-[#ffffff] via-[#faf8f5] to-[#f5f2ea] border-b border-[#e8e2d8]">
+    <div class="max-w-4xl mx-auto text-center space-y-6">
       
       <!-- Top Badge -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-stone-900/90 border border-stone-800 text-xs font-semibold text-amber-400 shadow-inner">
-        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f2ede4] border border-[#dfd7c9] text-xs font-semibold text-[#166534]">
+        <span class="w-2 h-2 rounded-full bg-[#166534]"></span>
         Solving Urban Spatial Violations & 3D Land Registry
       </div>
 
       <!-- Main Headline -->
-      <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#1a1714] leading-tight">
         Land Records Aren't Just Flat Maps. <br/>
-        <span class="gradient-text">They're 3D. And They Have Memory.</span>
+        <span class="text-[#166534]">They're 3D. And They Have Memory.</span>
       </h1>
 
       <!-- Subtitle -->
-      <p class="max-w-3xl mx-auto text-base sm:text-lg text-stone-300 leading-relaxed font-normal">
-        <strong class="text-white font-bold">Bhu Stack</strong> transforms flat municipal cadastres into living 3D digital twins. It reconstructs multi-story buildings directly from sanctioned floor plans, automatically flags unauthorized extra floors and encroachments, and preserves continuous lifecycle memory over time.
+      <p class="max-w-2xl mx-auto text-base sm:text-lg text-[#5c534a] leading-relaxed font-normal">
+        <strong class="text-[#1a1714] font-semibold">Bhu Stack</strong> transforms flat municipal cadastres into living 3D digital twins. It reconstructs multi-story buildings directly from sanctioned plans, automatically flags unauthorized extra floors and encroachments, and preserves continuous lifecycle memory over time.
       </p>
 
       <!-- CTA Buttons -->
-      <div class="pt-4 flex items-center justify-center gap-4 flex-wrap">
-        <a href="#interactive-prototype" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-[#141210] shadow-xl shadow-amber-500/25 flex items-center gap-2 transition-all">
+      <div class="pt-2 flex items-center justify-center gap-4 flex-wrap">
+        <a href="#interactive-prototype" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-[#166534] hover:bg-[#14532d] text-white shadow-sm flex items-center gap-2 transition-all">
           <span>Explore The 3-Step Prototype</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </a>
-        <a href="#map-locator" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-stone-900/90 hover:bg-stone-800 text-stone-200 border border-stone-800 flex items-center gap-2 transition-all">
-          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+        <a href="#map-locator" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-white hover:bg-[#f5f2ea] text-[#3d3832] border border-[#d8d0c2] shadow-2xs flex items-center gap-2 transition-all">
+          <svg class="w-4 h-4 text-[#166534]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
           <span>Locate Buildings on Cadastral Map</span>
         </a>
       </div>
 
       <!-- Quick Metrics Bar -->
-      <div class="pt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
-        <div class="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 backdrop-blur-sm">
-          <div class="text-2xl font-black text-amber-400">3D ULPIN</div>
-          <p class="text-xs text-stone-400 mt-1">Vertical floor-by-floor legal strata identifier</p>
+      <div class="pt-8 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto text-left">
+        <div class="p-3.5 rounded-xl bg-white border border-[#e4ded3] shadow-2xs">
+          <div class="text-xl font-extrabold text-[#166534]">3D ULPIN</div>
+          <p class="text-xs text-[#786f65] mt-0.5">Vertical floor-by-floor legal strata identifier</p>
         </div>
-        <div class="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 backdrop-blur-sm">
-          <div class="text-2xl font-black text-emerald-400">100% Auto</div>
-          <p class="text-xs text-stone-400 mt-1">Reconstructed from existing permit blueprints</p>
+        <div class="p-3.5 rounded-xl bg-white border border-[#e4ded3] shadow-2xs">
+          <div class="text-xl font-extrabold text-[#166534]">100% Auto</div>
+          <p class="text-xs text-[#786f65] mt-0.5">Reconstructed from existing permit blueprints</p>
         </div>
-        <div class="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 backdrop-blur-sm">
-          <div class="text-2xl font-black text-rose-400">Instant Flag</div>
-          <p class="text-xs text-stone-400 mt-1">Detects unapproved extra floors and setbacks</p>
+        <div class="p-3.5 rounded-xl bg-white border border-[#e4ded3] shadow-2xs">
+          <div class="text-xl font-extrabold text-[#dc2626]">Instant Flag</div>
+          <p class="text-xs text-[#786f65] mt-0.5">Detects unapproved extra floors & setbacks</p>
         </div>
-        <div class="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 backdrop-blur-sm">
-          <div class="text-2xl font-black text-amber-300">Immutable</div>
-          <p class="text-xs text-stone-400 mt-1">Temporal historical ledger prevents resale fraud</p>
+        <div class="p-3.5 rounded-xl bg-white border border-[#e4ded3] shadow-2xs">
+          <div class="text-xl font-extrabold text-[#d97706]">Immutable</div>
+          <p class="text-xs text-[#786f65] mt-0.5">Historical ledger prevents resale title fraud</p>
         </div>
       </div>
 
@@ -189,17 +172,17 @@
   <!-- ============================================== -->
   <!-- SECTION: THE CORE IDEA IN THREE STEPS           -->
   <!-- ============================================== -->
-  <section id="how-it-works" class="py-20 px-6 bg-[#181512] border-y border-[#2d2823]">
+  <section id="how-it-works" class="py-20 px-6 bg-[#f7f5f0] border-b border-[#e8e2d8]">
     <div class="max-w-6xl mx-auto space-y-12">
       
-      <div class="text-center max-w-3xl mx-auto space-y-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-amber-400">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#166534]">
           The Core Breakthrough
         </span>
-        <h2 class="text-3xl sm:text-4xl font-black text-white">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1714]">
           Here's The Idea In Three Steps
         </h2>
-        <p class="text-sm sm:text-base text-stone-300">
+        <p class="text-sm text-[#5c534a]">
           How Bhu Stack solves illegal construction, protects property buyers, and gives municipalities continuous visibility.
         </p>
       </div>
@@ -207,56 +190,56 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         <!-- Step 1 Card -->
-        <div class="p-6 rounded-2xl bg-[#1f1b17] border border-[#332c25] hover:border-amber-500/50 transition-all flex flex-col justify-between group">
+        <div class="p-6 rounded-2xl bg-white border border-[#e5dfd3] shadow-2xs hover:shadow-md transition-all flex flex-col justify-between">
           <div class="space-y-4">
-            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-400 flex items-center justify-center font-black text-lg">
+            <div class="w-11 h-11 rounded-xl bg-[#ecfdf5] border border-[#a7f3d0] text-[#166534] flex items-center justify-center font-extrabold text-lg">
               1
             </div>
-            <h3 class="text-xl font-bold text-white group-hover:text-amber-300 transition-colors">
+            <h3 class="text-lg font-bold text-[#1a1714]">
               Build Simple 3D Model from Existing Plans
             </h3>
-            <p class="text-sm text-stone-300 leading-relaxed">
+            <p class="text-sm text-[#5c534a] leading-relaxed">
               We build a simple, accurate 3D model of the building from what's already available — like a sanctioned floor plan or CAD drawings. No expensive manual 3D modeling required.
             </p>
           </div>
-          <div class="pt-6 border-t border-[#332c25] mt-6 text-xs font-mono text-amber-400 flex items-center gap-1.5">
-            <span>CMDA Approved Blueprint → 3D Volumetric Extrusion</span>
+          <div class="pt-4 border-t border-[#ede8de] mt-6 text-xs font-mono text-[#166534] font-semibold">
+            CMDA Approved Blueprint → 3D Volumetric Extrusion
           </div>
         </div>
 
         <!-- Step 2 Card -->
-        <div class="p-6 rounded-2xl bg-[#1f1b17] border border-[#332c25] hover:border-rose-500/50 transition-all flex flex-col justify-between group">
+        <div class="p-6 rounded-2xl bg-white border border-[#e5dfd3] shadow-2xs hover:shadow-md transition-all flex flex-col justify-between">
           <div class="space-y-4">
-            <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-400 flex items-center justify-center font-black text-lg">
+            <div class="w-11 h-11 rounded-xl bg-[#fef2f2] border border-[#fecaca] text-[#dc2626] flex items-center justify-center font-extrabold text-lg">
               2
             </div>
-            <h3 class="text-xl font-bold text-white group-hover:text-rose-300 transition-colors">
+            <h3 class="text-lg font-bold text-[#1a1714]">
               Check Against What Was Officially Approved
             </h3>
-            <p class="text-sm text-stone-300 leading-relaxed">
+            <p class="text-sm text-[#5c534a] leading-relaxed">
               We check the as-built reality against what was officially sanctioned. If something doesn't match — an unapproved extra floor, for instance, or setback encroachment — the system flags it automatically.
             </p>
           </div>
-          <div class="pt-6 border-t border-[#332c25] mt-6 text-xs font-mono text-rose-400 flex items-center gap-1.5">
-            <span>+6m Height Breach & Encroachments Flagged</span>
+          <div class="pt-4 border-t border-[#ede8de] mt-6 text-xs font-mono text-[#dc2626] font-semibold">
+            +6m Height Breach & Encroachments Flagged
           </div>
         </div>
 
         <!-- Step 3 Card -->
-        <div class="p-6 rounded-2xl bg-[#1f1b17] border border-[#332c25] hover:border-emerald-500/50 transition-all flex flex-col justify-between group">
+        <div class="p-6 rounded-2xl bg-white border border-[#e5dfd3] shadow-2xs hover:shadow-md transition-all flex flex-col justify-between">
           <div class="space-y-4">
-            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 flex items-center justify-center font-black text-lg">
+            <div class="w-11 h-11 rounded-xl bg-[#fffbeb] border border-[#fde68a] text-[#d97706] flex items-center justify-center font-extrabold text-lg">
               3
             </div>
-            <h3 class="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">
+            <h3 class="text-lg font-bold text-[#1a1714]">
               Running History: Memory, Not Just a Snapshot
             </h3>
-            <p class="text-sm text-stone-300 leading-relaxed">
+            <p class="text-sm text-[#5c534a] leading-relaxed">
               Every building keeps a running history over time, so the record isn't a one-time snapshot — it's memory. Buyers and banks can scrub through time to see every permit, change, and violation before investing.
             </p>
           </div>
-          <div class="pt-6 border-t border-[#332c25] mt-6 text-xs font-mono text-emerald-400 flex items-center gap-1.5">
-            <span>2021 Plan → 2024 Audit Flag → 2026 Live Ledger</span>
+          <div class="pt-4 border-t border-[#ede8de] mt-6 text-xs font-mono text-[#d97706] font-semibold">
+            2021 Plan → 2024 Audit Flag → 2026 Live Ledger
           </div>
         </div>
 
@@ -268,53 +251,51 @@
   <!-- ============================================== -->
   <!-- SECTION: INTERACTIVE 3D PROTOTYPE DEMO         -->
   <!-- ============================================== -->
-  <section id="interactive-prototype" class="py-20 px-6 relative">
+  <section id="interactive-prototype" class="py-20 px-6 bg-white border-b border-[#e8e2d8]">
     <div class="max-w-7xl mx-auto space-y-8">
       
       <!-- Section Header -->
-      <div class="flex items-end justify-between gap-4 flex-wrap border-b border-[#2d2823] pb-6">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-400">
-            Live Embedded Prototype
-          </span>
-          <h2 class="text-3xl sm:text-4xl font-black text-white mt-1">
-            Experience the 3-Step Prototype
-          </h2>
-          <p class="text-sm text-stone-400 mt-1">
-            Interact with the actual 3D digital twin engine below. Orbit with your mouse, test automated audit scans, and scrub the history.
-          </p>
-        </div>
+      <div class="border-b border-[#e8e2d8] pb-6">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#166534]">
+          Live Embedded Prototype
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1714] mt-1">
+          Experience the 3-Step Prototype
+        </h2>
+        <p class="text-sm text-[#5c534a] mt-1">
+          Interact with the actual 3D digital twin engine below. Orbit with your mouse, test automated audit scans, and scrub the history.
+        </p>
       </div>
 
       <!-- Prototype Interactive Container -->
-      <div class="rounded-3xl border border-[#2d2823] bg-[#181512] shadow-2xl overflow-hidden flex flex-col lg:flex-row h-[720px]">
+      <div class="rounded-3xl border border-[#ded8cb] bg-[#faf8f5] shadow-sm overflow-hidden flex flex-col lg:flex-row h-[720px]">
         
         <!-- 3D Canvas Side -->
-        <div class="flex-1 relative flex flex-col bg-gradient-to-b from-[#1c1916] to-[#12100e] overflow-hidden">
+        <div class="flex-1 relative flex flex-col bg-gradient-to-b from-[#fdfcfb] to-[#f4f1ea] overflow-hidden">
           
           <!-- Top Floating Legend & Step Tabs -->
           <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between gap-2 flex-wrap pointer-events-none">
             
-            <div class="bg-[#181512]/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#332c25] shadow-md text-xs pointer-events-auto flex items-center gap-3">
+            <div class="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#ded8cb] shadow-xs text-xs pointer-events-auto flex items-center gap-3">
               <div class="flex items-center gap-1.5">
-                <span class="w-3 h-3 rounded-sm bg-emerald-500 inline-block"></span>
-                <span class="font-semibold text-stone-200">Sanctioned (10 Floors / 30m)</span>
+                <span class="w-3 h-3 rounded-sm bg-[#166534] inline-block"></span>
+                <span class="font-semibold text-[#2c2825]">Sanctioned (10 Floors / 30m)</span>
               </div>
               <div id="legend-violation" class="hidden flex items-center gap-1.5">
-                <span class="w-3 h-3 rounded-sm bg-rose-500 inline-block animate-pulse"></span>
-                <span class="font-bold text-rose-400">Unapproved Floors 11 & 12 (+6m)</span>
+                <span class="w-3 h-3 rounded-sm bg-[#dc2626] inline-block animate-pulse"></span>
+                <span class="font-bold text-[#dc2626]">Unapproved Floors 11 & 12 (+6m)</span>
               </div>
             </div>
 
             <!-- Step Selector Tabs -->
-            <div class="bg-[#181512]/95 backdrop-blur-md p-1 rounded-xl border border-[#332c25] shadow-md pointer-events-auto flex items-center gap-1">
-              <button id="step-btn-1" onclick="setStep(1)" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-500 text-[#141210] shadow-sm cursor-pointer">
+            <div class="bg-white/95 backdrop-blur-md p-1 rounded-xl border border-[#ded8cb] shadow-xs pointer-events-auto flex items-center gap-1">
+              <button id="step-btn-1" onclick="setStep(1)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-[#166534] text-white shadow-2xs cursor-pointer">
                 1. Reconstruct 3D
               </button>
-              <button id="step-btn-2" onclick="setStep(2)" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-white cursor-pointer">
+              <button id="step-btn-2" onclick="setStep(2)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:text-[#1a1714] cursor-pointer">
                 2. Audit Approvals
               </button>
-              <button id="step-btn-3" onclick="setStep(3)" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-white cursor-pointer">
+              <button id="step-btn-3" onclick="setStep(3)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:text-[#1a1714] cursor-pointer">
                 3. Running Memory
               </button>
             </div>
@@ -325,66 +306,66 @@
           <div id="three-container" class="w-full flex-1 cursor-grab active:cursor-grabbing"></div>
 
           <!-- Bottom Camera Hint -->
-          <div class="absolute bottom-4 left-4 z-20 bg-[#181512]/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#332c25] text-[11px] text-stone-400 pointer-events-none">
+          <div class="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#ded8cb] text-[11px] text-[#786f65] pointer-events-none">
             💡 Drag mouse to rotate 360° around the 3D building
           </div>
         </div>
 
         <!-- Right Side: Step Controls & Explanation Drawer -->
-        <div class="w-full lg:w-[460px] bg-[#141210] border-t lg:border-t-0 lg:border-l border-[#2d2823] flex flex-col justify-between overflow-y-auto shrink-0 p-6 space-y-6">
+        <div class="w-full lg:w-[450px] bg-white border-t lg:border-t-0 lg:border-l border-[#ded8cb] flex flex-col justify-between overflow-y-auto shrink-0 p-6 space-y-6">
           
           <!-- STEP 1 DRAWER CONTENT -->
           <div id="step-panel-1" class="space-y-5">
             <div>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/25">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#ecfdf5] text-[#166534] border border-[#a7f3d0]">
                 Step 1: Digital Reconstruction
               </span>
-              <h3 class="text-xl font-black text-white mt-2">Reconstruct 3D from Floor Plan</h3>
-              <p class="text-xs text-stone-300 leading-relaxed mt-1">
+              <h3 class="text-xl font-bold text-[#1a1714] mt-2">Reconstruct 3D from Floor Plan</h3>
+              <p class="text-xs text-[#5c534a] leading-relaxed mt-1">
                 Municipalities already have sanctioned plans on file. Bhu Stack reads the building envelope, floor counts, and setback limits to construct the digital twin automatically.
               </p>
             </div>
 
             <!-- Sanctioned Blueprint Spec Card -->
-            <div class="p-4 rounded-xl bg-[#1c1915] border border-[#332c25] space-y-3">
+            <div class="p-4 rounded-xl bg-[#faf8f5] border border-[#ded8cb] space-y-3">
               <div class="flex items-center justify-between text-xs">
-                <span class="font-bold text-stone-200">Blueprint File #CMDA-2021-084</span>
-                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/30">
+                <span class="font-bold text-[#2c2825]">Blueprint File #CMDA-2021-084</span>
+                <span class="px-2 py-0.5 rounded bg-[#ecfdf5] text-[#166534] font-mono text-[10px] font-bold border border-[#a7f3d0]">
                   APPROVED PERMIT
                 </span>
               </div>
 
               <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="p-2.5 rounded-lg bg-[#141210] border border-[#2d2823]">
-                  <span class="text-[10px] text-stone-400 block">Sanctioned Height</span>
-                  <strong class="text-white text-sm">30.0m (G+9)</strong>
+                <div class="p-2.5 rounded-lg bg-white border border-[#ded8cb]">
+                  <span class="text-[10px] text-[#786f65] block">Sanctioned Height</span>
+                  <strong class="text-[#1a1714] text-sm">30.0m (G+9)</strong>
                 </div>
-                <div class="p-2.5 rounded-lg bg-[#141210] border border-[#2d2823]">
-                  <span class="text-[10px] text-stone-400 block">Approved Units</span>
-                  <strong class="text-white text-sm">20 Residential</strong>
+                <div class="p-2.5 rounded-lg bg-white border border-[#ded8cb]">
+                  <span class="text-[10px] text-[#786f65] block">Approved Units</span>
+                  <strong class="text-[#1a1714] text-sm">20 Residential</strong>
                 </div>
-                <div class="p-2.5 rounded-lg bg-[#141210] border border-[#2d2823]">
-                  <span class="text-[10px] text-stone-400 block">Base Parcel ULPIN</span>
-                  <strong class="text-amber-400 font-mono text-xs">14A7B9C23D45E1</strong>
+                <div class="p-2.5 rounded-lg bg-white border border-[#ded8cb]">
+                  <span class="text-[10px] text-[#786f65] block">Base Parcel ULPIN</span>
+                  <strong class="text-[#166534] font-mono text-xs">14A7B9C23D45E1</strong>
                 </div>
-                <div class="p-2.5 rounded-lg bg-[#141210] border border-[#2d2823]">
-                  <span class="text-[10px] text-stone-400 block">Parking Type</span>
-                  <strong class="text-stone-200 text-xs">Basement Allotted</strong>
+                <div class="p-2.5 rounded-lg bg-white border border-[#ded8cb]">
+                  <span class="text-[10px] text-[#786f65] block">Parking Type</span>
+                  <strong class="text-[#2c2825] text-xs">Basement Allotted</strong>
                 </div>
               </div>
 
               <!-- Animated Extrusion Bar -->
               <div class="pt-2 space-y-1.5">
                 <div class="flex justify-between text-xs font-semibold">
-                  <span class="text-stone-300">Extrusion Progress:</span>
-                  <span id="extrusion-counter" class="text-amber-400 font-mono">10 of 10 Floors</span>
+                  <span class="text-[#4a433d]">Extrusion Progress:</span>
+                  <span id="extrusion-counter" class="text-[#166534] font-mono font-bold">10 of 10 Floors</span>
                 </div>
-                <div class="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
-                  <div id="extrusion-bar" class="bg-gradient-to-r from-amber-500 via-amber-400 to-emerald-400 h-full transition-all duration-300 rounded-full" style="width: 100%"></div>
+                <div class="w-full bg-[#ede8de] h-2 rounded-full overflow-hidden">
+                  <div id="extrusion-bar" class="bg-[#166534] h-full transition-all duration-300 rounded-full" style="width: 100%"></div>
                 </div>
               </div>
 
-              <button onclick="replayExtrusion()" class="w-full py-2 px-3 rounded-lg border border-stone-700 bg-stone-800/90 hover:bg-stone-700 text-xs font-semibold text-stone-200 flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
+              <button onclick="replayExtrusion()" class="w-full py-2 px-3 rounded-lg border border-[#ded8cb] bg-white hover:bg-[#f7f5f0] text-xs font-semibold text-[#4a433d] flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs">
                 ↺ Replay 3D Extrusion
               </button>
             </div>
@@ -393,43 +374,43 @@
           <!-- STEP 2 DRAWER CONTENT -->
           <div id="step-panel-2" class="hidden space-y-5">
             <div>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/25">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#fef2f2] text-[#dc2626] border border-[#fecaca]">
                 Step 2: Automated Audit
               </span>
-              <h3 class="text-xl font-black text-white mt-2">Check Against Official Approvals</h3>
-              <p class="text-xs text-stone-300 leading-relaxed mt-1">
+              <h3 class="text-xl font-bold text-[#1a1714] mt-2">Check Against Official Approvals</h3>
+              <p class="text-xs text-[#5c534a] leading-relaxed mt-1">
                 When drone lidar or satellite scans are uploaded, the model checks the physical structure against the legal permit. Any unapproved discrepancy is flagged immediately.
               </p>
             </div>
 
             <!-- Violation Alerts -->
-            <div class="p-4 rounded-xl bg-rose-950/25 border border-rose-500/30 space-y-3">
-              <div class="flex items-center gap-2 text-rose-400 font-bold text-sm">
-                <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+            <div class="p-4 rounded-xl bg-[#fef2f2] border border-[#fecaca] space-y-3">
+              <div class="flex items-center gap-2 text-[#dc2626] font-bold text-sm">
+                <span class="w-2 h-2 rounded-full bg-[#dc2626] animate-ping"></span>
                 <span>Critical Deviations Detected</span>
               </div>
 
-              <div class="p-3 rounded-lg bg-[#1c1915] border border-rose-500/20 space-y-1">
-                <div class="flex items-center justify-between text-xs font-bold text-rose-300">
+              <div class="p-3 rounded-lg bg-white border border-[#fecaca] space-y-1 shadow-2xs">
+                <div class="flex items-center justify-between text-xs font-bold text-[#b91c1c]">
                   <span>Unapproved Rooftop Floors</span>
-                  <span class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 text-[10px]">+6.0m Violation</span>
+                  <span class="px-1.5 py-0.5 rounded bg-[#fef2f2] text-[#dc2626] text-[10px] border border-[#fecaca]">+6.0m Violation</span>
                 </div>
-                <p class="text-[11px] text-stone-300">
+                <p class="text-[11px] text-[#5c534a]">
                   Approved: <strong>30.0m (10 floors)</strong>. As-Built: <strong>36.0m (12 floors)</strong>. Unauthorized penthouse levels added.
                 </p>
               </div>
 
-              <div class="p-3 rounded-lg bg-[#1c1915] border border-amber-500/20 space-y-1">
-                <div class="flex items-center justify-between text-xs font-bold text-amber-300">
+              <div class="p-3 rounded-lg bg-white border border-[#fed7aa] space-y-1 shadow-2xs">
+                <div class="flex items-center justify-between text-xs font-bold text-[#c2410c]">
                   <span>Setback Encroachment</span>
-                  <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px]">2.0m Overhang</span>
+                  <span class="px-1.5 py-0.5 rounded bg-[#fff7ed] text-[#ea580c] text-[10px] border border-[#fed7aa]">2.0m Overhang</span>
                 </div>
-                <p class="text-[11px] text-stone-300">
+                <p class="text-[11px] text-[#5c534a]">
                   Cantilevered balcony protrudes 2m past the sanctioned cadastral boundary into the street buffer.
                 </p>
               </div>
 
-              <button onclick="triggerLaserScan()" class="w-full py-2.5 px-3 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-rose-600/20">
+              <button onclick="triggerLaserScan()" class="w-full py-2.5 px-3 rounded-lg bg-[#dc2626] hover:bg-[#b91c1c] text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs">
                 ⚡ Re-Run Spatial Scan Audit
               </button>
             </div>
@@ -438,44 +419,44 @@
           <!-- STEP 3 DRAWER CONTENT -->
           <div id="step-panel-3" class="hidden space-y-5">
             <div>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/25">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#fffbeb] text-[#d97706] border border-[#fde68a]">
                 Step 3: Continuous Memory
               </span>
-              <h3 class="text-xl font-black text-white mt-2">Memory, Not Just a Snapshot</h3>
-              <p class="text-xs text-stone-300 leading-relaxed mt-1">
+              <h3 class="text-xl font-bold text-[#1a1714] mt-2">Memory, Not Just a Snapshot</h3>
+              <p class="text-xs text-[#5c534a] leading-relaxed mt-1">
                 A building record isn't static. Bhu Stack keeps an immutable running memory ledger over time so buyers, banks, and authorities see the complete true history.
               </p>
             </div>
 
             <!-- Temporal Scrubber -->
             <div class="space-y-2">
-              <div class="flex items-center justify-between text-xs font-semibold text-stone-300">
+              <div class="flex items-center justify-between text-xs font-semibold text-[#4a433d]">
                 <span>Select Timeline Year:</span>
-                <span id="timeline-year-badge" class="text-amber-400 font-mono font-bold text-sm">2021</span>
+                <span id="timeline-year-badge" class="text-[#d97706] font-mono font-bold text-sm">2021</span>
               </div>
 
-              <div class="grid grid-cols-5 gap-1 bg-[#1c1915] p-1 rounded-xl border border-[#332c25]">
-                <button onclick="selectTimeline(0)" id="t-btn-0" class="py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-500 text-[#141210] cursor-pointer">2021</button>
-                <button onclick="selectTimeline(1)" id="t-btn-1" class="py-1.5 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-white cursor-pointer">2023</button>
-                <button onclick="selectTimeline(2)" id="t-btn-2" class="py-1.5 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-white cursor-pointer">2024</button>
-                <button onclick="selectTimeline(3)" id="t-btn-3" class="py-1.5 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-white cursor-pointer">2025</button>
-                <button onclick="selectTimeline(4)" id="t-btn-4" class="py-1.5 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-white cursor-pointer">2026</button>
+              <div class="grid grid-cols-5 gap-1 bg-[#faf8f5] p-1 rounded-xl border border-[#ded8cb]">
+                <button onclick="selectTimeline(0)" id="t-btn-0" class="py-1.5 rounded-lg text-xs font-bold transition-all bg-[#166534] text-white cursor-pointer">2021</button>
+                <button onclick="selectTimeline(1)" id="t-btn-1" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#efece4] cursor-pointer">2023</button>
+                <button onclick="selectTimeline(2)" id="t-btn-2" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#efece4] cursor-pointer">2024</button>
+                <button onclick="selectTimeline(3)" id="t-btn-3" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#efece4] cursor-pointer">2025</button>
+                <button onclick="selectTimeline(4)" id="t-btn-4" class="py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#efece4] cursor-pointer">2026</button>
               </div>
             </div>
 
             <!-- Active Timeline Event Card -->
-            <div id="timeline-event-card" class="p-4 rounded-xl bg-[#1c1915] border border-[#332c25] space-y-2 text-xs">
+            <div id="timeline-event-card" class="p-4 rounded-xl bg-[#faf8f5] border border-[#ded8cb] space-y-2 text-xs">
               <!-- Dynamically populated -->
             </div>
           </div>
 
           <!-- Bottom Navigation Bar -->
-          <div class="pt-4 border-t border-[#2d2823] flex items-center justify-between">
-            <button id="prev-btn" onclick="prevStep()" disabled class="text-xs font-bold px-3.5 py-2 rounded-xl border border-[#332c25] bg-stone-900/60 text-stone-600 cursor-not-allowed">
+          <div class="pt-4 border-t border-[#ded8cb] flex items-center justify-between">
+            <button id="prev-btn" onclick="prevStep()" disabled class="text-xs font-bold px-3.5 py-2 rounded-xl border border-[#ded8cb] bg-[#faf8f5] text-[#a89f91] cursor-not-allowed">
               ← Previous Step
             </button>
-            <span id="step-indicator" class="text-xs font-mono font-bold text-stone-400">Step 1 of 3</span>
-            <button id="next-btn" onclick="nextStep()" class="text-xs font-bold px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-[#141210] font-black cursor-pointer transition-colors shadow-md shadow-amber-500/20">
+            <span id="step-indicator" class="text-xs font-mono font-bold text-[#786f65]">Step 1 of 3</span>
+            <button id="next-btn" onclick="nextStep()" class="text-xs font-bold px-4 py-2 rounded-xl bg-[#166534] hover:bg-[#14532d] text-white cursor-pointer transition-colors shadow-2xs">
               Next Step →
             </button>
           </div>
@@ -490,51 +471,51 @@
   <!-- ============================================== -->
   <!-- SECTION: CADASTRAL MAP LOCATOR                 -->
   <!-- ============================================== -->
-  <section id="map-locator" class="py-20 px-6 bg-[#181512] border-t border-[#2d2823]">
+  <section id="map-locator" class="py-20 px-6 bg-[#f7f5f0] border-b border-[#e8e2d8]">
     <div class="max-w-7xl mx-auto space-y-8">
       
-      <div class="max-w-3xl space-y-2">
-        <span class="text-xs font-bold uppercase tracking-wider text-amber-400">
+      <div class="max-w-2xl space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#166534]">
           Spatial GIS Interface
         </span>
-        <h2 class="text-3xl sm:text-4xl font-black text-white">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1714]">
           Locate Any Building Across The City
         </h2>
-        <p class="text-sm text-stone-300">
+        <p class="text-sm text-[#5c534a]">
           Inspect cadastral parcels in Chennai (T Nagar, Alwarpet, Adyar). Click any pin on the map to load its legal parameters and launch its 3D digital twin.
         </p>
       </div>
 
       <!-- Map & Sidebar Split -->
-      <div class="rounded-3xl border border-[#2d2823] bg-[#141210] shadow-2xl overflow-hidden flex flex-col lg:flex-row h-[600px]">
+      <div class="rounded-3xl border border-[#ded8cb] bg-white shadow-sm overflow-hidden flex flex-col lg:flex-row h-[600px]">
         
         <!-- Leaflet Map Container -->
         <div class="flex-1 relative flex flex-col">
           <div id="map-container" class="w-full flex-1"></div>
 
           <!-- Floating Map Legend -->
-          <div class="absolute bottom-4 left-4 z-[500] bg-[#181512]/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#332c25] text-xs flex items-center gap-3">
+          <div class="absolute bottom-4 left-4 z-[500] bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#ded8cb] shadow-xs text-xs flex items-center gap-3">
             <div class="flex items-center gap-1.5">
-              <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
-              <span class="text-stone-300">Compliant (10F)</span>
+              <span class="w-3 h-3 rounded-full bg-[#166534] inline-block"></span>
+              <span class="text-[#4a433d] font-medium">Compliant (10F)</span>
             </div>
             <div class="flex items-center gap-1.5">
-              <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
-              <span class="text-stone-300">Height Breach (12F)</span>
+              <span class="w-3 h-3 rounded-full bg-[#dc2626] inline-block"></span>
+              <span class="text-[#4a433d] font-medium">Height Breach (12F)</span>
             </div>
             <div class="flex items-center gap-1.5">
-              <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
-              <span class="text-stone-300">Setback Encroachment</span>
+              <span class="w-3 h-3 rounded-full bg-[#d97706] inline-block"></span>
+              <span class="text-[#4a433d] font-medium">Setback Encroachment</span>
             </div>
           </div>
         </div>
 
         <!-- Right Side: Parcel Details & Selector -->
-        <div class="w-full lg:w-[420px] bg-[#141210] border-t lg:border-t-0 lg:border-l border-[#2d2823] p-6 flex flex-col justify-between overflow-y-auto space-y-4">
+        <div class="w-full lg:w-[420px] bg-[#faf8f5] border-t lg:border-t-0 lg:border-l border-[#ded8cb] p-6 flex flex-col justify-between overflow-y-auto space-y-4">
           
           <div>
-            <h3 class="text-sm font-bold uppercase tracking-wider text-stone-400">Cadastral Registry</h3>
-            <p class="text-xs text-stone-400 mt-0.5">Click a building card to fly to its parcel:</p>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#786f65]">Cadastral Registry</h3>
+            <p class="text-xs text-[#5c534a] mt-0.5">Click a building card to fly to its parcel:</p>
 
             <div id="buildings-list" class="mt-4 space-y-2.5">
               <!-- Populated by JS -->
@@ -542,29 +523,29 @@
           </div>
 
           <!-- Selected Property Banner -->
-          <div class="p-4 rounded-2xl bg-[#1c1915] border border-[#332c25] space-y-3">
+          <div class="p-4 rounded-2xl bg-white border border-[#ded8cb] shadow-2xs space-y-3">
             <div class="flex items-center justify-between">
               <div>
-                <span id="banner-area" class="text-[10px] font-bold text-stone-400 uppercase block">Selected Parcel</span>
-                <h4 id="banner-name" class="text-sm font-extrabold text-white">Sunrise Apartments</h4>
+                <span id="banner-area" class="text-[10px] font-bold text-[#786f65] uppercase block">Selected Parcel</span>
+                <h4 id="banner-name" class="text-sm font-bold text-[#1a1714]">Sunrise Apartments</h4>
               </div>
-              <span id="banner-status-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              <span id="banner-status-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-[#ecfdf5] text-[#166534] border border-[#a7f3d0]">
                 Compliant
               </span>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-xs font-mono">
-              <div class="p-2 rounded-lg bg-[#141210] border border-[#2d2823]">
-                <span class="text-[10px] text-stone-400 font-sans block">Base ULPIN</span>
-                <strong id="banner-ulpin" class="text-amber-400 text-xs">14A7B9C23D45E1</strong>
+              <div class="p-2 rounded-lg bg-[#faf8f5] border border-[#ded8cb]">
+                <span class="text-[10px] text-[#786f65] font-sans block">Base ULPIN</span>
+                <strong id="banner-ulpin" class="text-[#166534] text-xs">14A7B9C23D45E1</strong>
               </div>
-              <div class="p-2 rounded-lg bg-[#141210] border border-[#2d2823]">
-                <span class="text-[10px] text-stone-400 font-sans block">Sanctioned</span>
-                <strong id="banner-height" class="text-stone-200 text-xs font-sans">30m (10 Floors)</strong>
+              <div class="p-2 rounded-lg bg-[#faf8f5] border border-[#ded8cb]">
+                <span class="text-[10px] text-[#786f65] font-sans block">Sanctioned</span>
+                <strong id="banner-height" class="text-[#2c2825] text-xs font-sans">30m (10 Floors)</strong>
               </div>
             </div>
 
-            <button onclick="launch3DFromMap()" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-[#141210] font-black text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-lg shadow-amber-500/20">
+            <button onclick="launch3DFromMap()" class="w-full py-2.5 px-3 rounded-xl bg-[#166534] hover:bg-[#14532d] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs">
               <span>Inspect in 3D Prototype</span>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
@@ -580,60 +561,60 @@
   <!-- ============================================== -->
   <!-- SECTION: SYSTEM ARCHITECTURE & IMPACT          -->
   <!-- ============================================== -->
-  <section id="architecture" class="py-20 px-6">
+  <section id="architecture" class="py-20 px-6 bg-white">
     <div class="max-w-6xl mx-auto space-y-12">
       
-      <div class="text-center max-w-3xl mx-auto space-y-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-amber-400">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#166534]">
           Under The Hood
         </span>
-        <h2 class="text-3xl sm:text-4xl font-black text-white">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1714]">
           Why Bhu Stack Transforms Municipal Governance
         </h2>
-        <p class="text-sm sm:text-base text-stone-400">
+        <p class="text-sm text-[#5c534a]">
           Bridging the gap between legal master plans, physical construction reality, and secondary property transactions.
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <div class="p-8 rounded-3xl bg-[#1c1915] border border-[#332c25] space-y-4">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 flex items-center justify-center font-bold">
+        <div class="p-8 rounded-3xl bg-[#faf8f5] border border-[#ded8cb] space-y-4 shadow-2xs">
+          <div class="w-12 h-12 rounded-2xl bg-[#ecfdf5] border border-[#a7f3d0] text-[#166534] flex items-center justify-center font-bold">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
           </div>
-          <h3 class="text-xl font-bold text-white">For Municipalities & Town Planners</h3>
-          <ul class="space-y-2.5 text-xs sm:text-sm text-stone-300">
+          <h3 class="text-xl font-bold text-[#1a1714]">For Municipalities & Town Planners</h3>
+          <ul class="space-y-2.5 text-xs sm:text-sm text-[#5c534a]">
             <li class="flex items-start gap-2">
-              <span class="text-emerald-400 font-bold">✓</span>
+              <span class="text-[#166534] font-bold">✓</span>
               <span><strong>Autonomous Spatial Audits:</strong> Compare drone survey point clouds against sanctioned boundaries without manual site raids.</span>
             </li>
             <li class="flex items-start gap-2">
-              <span class="text-emerald-400 font-bold">✓</span>
+              <span class="text-[#166534] font-bold">✓</span>
               <span><strong>Automated Penalty Notices:</strong> Generate legal violation notices with exact spatial coordinates and excess height measurements.</span>
             </li>
             <li class="flex items-start gap-2">
-              <span class="text-emerald-400 font-bold">✓</span>
+              <span class="text-[#166534] font-bold">✓</span>
               <span><strong>Volumetric Strata Registry:</strong> Assign true 3D ULPIN codes to every vertical unit, parking allotment, and air rights.</span>
             </li>
           </ul>
         </div>
 
-        <div class="p-8 rounded-3xl bg-[#1c1915] border border-[#332c25] space-y-4">
-          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-amber-400 flex items-center justify-center font-bold">
+        <div class="p-8 rounded-3xl bg-[#faf8f5] border border-[#ded8cb] space-y-4 shadow-2xs">
+          <div class="w-12 h-12 rounded-2xl bg-[#fffbeb] border border-[#fde68a] text-[#d97706] flex items-center justify-center font-bold">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
           </div>
-          <h3 class="text-xl font-bold text-white">For Homebuyers & Mortgage Banks</h3>
-          <ul class="space-y-2.5 text-xs sm:text-sm text-stone-300">
+          <h3 class="text-xl font-bold text-[#1a1714]">For Homebuyers & Mortgage Banks</h3>
+          <ul class="space-y-2.5 text-xs sm:text-sm text-[#5c534a]">
             <li class="flex items-start gap-2">
-              <span class="text-amber-400 font-bold">✓</span>
+              <span class="text-[#d97706] font-bold">✓</span>
               <span><strong>Zero-Fraud Verification:</strong> Scan a property's ULPIN QR code to verify if the 11th or 12th floor is legally approved before buying.</span>
             </li>
             <li class="flex items-start gap-2">
-              <span class="text-amber-400 font-bold">✓</span>
+              <span class="text-[#d97706] font-bold">✓</span>
               <span><strong>Bank Loan Due Diligence:</strong> Lenders instantly flag encumbered or unapproved floors, preventing non-performing bad mortgages.</span>
             </li>
             <li class="flex items-start gap-2">
-              <span class="text-amber-400 font-bold">✓</span>
+              <span class="text-[#d97706] font-bold">✓</span>
               <span><strong>Immutable History:</strong> An illegal floor constructed 3 years after handover can never be disguised as "original construction."</span>
             </li>
           </ul>
@@ -647,25 +628,25 @@
   <!-- ============================================== -->
   <!-- FOOTER                                         -->
   <!-- ============================================== -->
-  <footer class="border-t border-[#2d2823] bg-[#0f0e0c] py-12 px-6">
+  <footer class="border-t border-[#e8e2d8] bg-[#f5f2ea] py-12 px-6">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
       
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-amber-500 text-[#141210] flex items-center justify-center font-black">
+        <div class="w-8 h-8 rounded-lg bg-[#166534] text-white flex items-center justify-center font-black">
           B
         </div>
         <div>
-          <span class="font-bold text-white text-sm">Bhu Stack</span>
-          <p class="text-xs text-stone-400">3D Municipal Digital Twin & Cadastral Memory Registry</p>
+          <span class="font-bold text-[#1a1714] text-sm">Bhu Stack</span>
+          <p class="text-xs text-[#786f65]">3D Municipal Digital Twin & Cadastral Memory Registry</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-6 text-xs text-stone-400">
-        <a href="#hero" class="hover:text-white transition-colors">Top</a>
-        <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
-        <a href="#interactive-prototype" class="hover:text-white transition-colors">3D Prototype</a>
-        <a href="#map-locator" class="hover:text-white transition-colors">Cadastral Map</a>
-        <a href="http://localhost:3000/" target="_blank" class="text-amber-400 hover:underline">Launch Full App ↗</a>
+      <div class="flex items-center gap-6 text-xs text-[#5c534a] font-medium">
+        <a href="#hero" class="hover:text-[#1a1714] transition-colors">Top</a>
+        <a href="#how-it-works" class="hover:text-[#1a1714] transition-colors">How It Works</a>
+        <a href="#interactive-prototype" class="hover:text-[#1a1714] transition-colors">3D Prototype</a>
+        <a href="#map-locator" class="hover:text-[#1a1714] transition-colors">Cadastral Map</a>
+        <a href="http://localhost:3000/" target="_blank" class="text-[#166534] font-bold hover:underline">Launch Full App ↗</a>
       </div>
 
     </div>
@@ -688,7 +669,7 @@
         floorsCount: 10,
         status: 'compliant',
         statusLabel: 'Fully Compliant',
-        badgeColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+        badgeColor: 'bg-[#ecfdf5] text-[#166534] border border-[#a7f3d0]',
         markerClass: 'marker-compliant',
         parking: 'Basement (6 slots)',
         desc: '10-storey residential community in T Nagar with basement parking and compliant footprint.'
@@ -704,7 +685,7 @@
         floorsCount: 12,
         status: 'violation',
         statusLabel: 'Height Breach (+6m)',
-        badgeColor: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
+        badgeColor: 'bg-[#fef2f2] text-[#dc2626] border border-[#fecaca]',
         markerClass: 'marker-height-violation',
         parking: 'Surface Lot (8 slots)',
         desc: '12-storey development in Alwarpet exceeding sanctioned master plan limit by 2 unapproved penthouse floors.'
@@ -720,7 +701,7 @@
         floorsCount: 9,
         status: 'encroachment',
         statusLabel: 'Boundary Encroachment',
-        badgeColor: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+        badgeColor: 'bg-[#fffbeb] text-[#d97706] border border-[#fde68a]',
         markerClass: 'marker-encroachment',
         parking: 'Basement (10 slots)',
         desc: '9-storey residential complex in Adyar protruding 2 meters past registered property boundary.'
@@ -731,14 +712,14 @@
     let leafletMap = null;
     let mapMarkers = [];
 
-    // Timeline Data for Step 3 (Warm earth palette, zero blue/indigo)
+    // Timeline Data for Step 3 (Simple, clean light accents, zero blue)
     const timelineData = [
       {
         year: '2021',
         date: 'March 14, 2021',
         title: 'Sanctioned Master Plan Approved',
         badge: 'Sanctioned Permit',
-        badgeColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+        badgeColor: 'bg-[#ecfdf5] text-[#166534] border border-[#a7f3d0]',
         floors: 10,
         hasViolation: false,
         desc: 'Municipal planning authority grants building permit for 10 residential floors (30m max) with basement parking. Base ULPIN assigned.'
@@ -748,7 +729,7 @@
         date: 'January 10, 2023',
         title: 'As-Built Physical Completion',
         badge: 'Compliant Handover',
-        badgeColor: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+        badgeColor: 'bg-[#fffbeb] text-[#d97706] border border-[#fde68a]',
         floors: 10,
         hasViolation: false,
         desc: 'Construction completed adhering to sanctioned 30m height limit. Occupancy certificate issued and cadastral survey matches 100%.'
@@ -758,7 +739,7 @@
         date: 'August 22, 2024',
         title: 'Unauthorized Vertical Extension Added',
         badge: 'Violation Flagged',
-        badgeColor: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
+        badgeColor: 'bg-[#fef2f2] text-[#dc2626] border border-[#fecaca]',
         floors: 12,
         hasViolation: true,
         desc: 'Drone telemetry registers 2 additional penthouse levels (+6m) without municipal approval. Digital twin automatically files discrepancy.'
@@ -768,7 +749,7 @@
         date: 'April 05, 2025',
         title: 'Strata Encumbrance & Title Freeze',
         badge: 'Legal Action',
-        badgeColor: 'bg-orange-500/10 text-orange-400 border-orange-500/30',
+        badgeColor: 'bg-[#fff7ed] text-[#ea580c] border border-[#fed7aa]',
         floors: 12,
         hasViolation: true,
         desc: 'Municipal registry places public legal redline on Floors 11 & 12. Banks and prospective buyers scanning the ULPIN QR are immediately alerted.'
@@ -778,7 +759,7 @@
         date: 'Present Day (Live)',
         title: 'Continuous Memory & Public Audit',
         badge: 'Immutable Record',
-        badgeColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+        badgeColor: 'bg-[#ecfdf5] text-[#166534] border border-[#a7f3d0]',
         floors: 12,
         hasViolation: true,
         desc: 'Complete lifecycle memory preserved. Every change, violation, and permit modification remains verifiable forever.'
@@ -796,7 +777,7 @@
     let isScanning = false;
 
     // -------------------------------------------------------------
-    // THREE.JS IMPLEMENTATION (Warm Obsidian & Amber Lighting)
+    // THREE.JS IMPLEMENTATION (Clean Light Architectural Environment)
     // -------------------------------------------------------------
     function initThree() {
       const container = document.getElementById('three-container');
@@ -806,7 +787,7 @@
       const height = container.clientHeight || 600;
 
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x141210);
+      scene.background = new THREE.Color(0xfcfbf8);
 
       camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
       camera.position.set(38, 28, 48);
@@ -820,29 +801,29 @@
 
       container.appendChild(renderer.domElement);
 
-      // Warm Lighting (Sunlight & Terracotta Glow, Zero Blue)
-      const ambient = new THREE.AmbientLight(0xfff8ee, 0.95);
+      // Light & Soft Architectural Illumination
+      const ambient = new THREE.AmbientLight(0xffffff, 0.95);
       scene.add(ambient);
 
-      const mainLight = new THREE.DirectionalLight(0xffedd5, 1.4);
+      const mainLight = new THREE.DirectionalLight(0xfff6ea, 1.3);
       mainLight.position.set(45, 60, 35);
       mainLight.castShadow = true;
       scene.add(mainLight);
 
-      const fillLight = new THREE.DirectionalLight(0xfef3c7, 0.45);
+      const fillLight = new THREE.DirectionalLight(0xfaebd7, 0.4);
       fillLight.position.set(-30, 25, -30);
       scene.add(fillLight);
 
-      // Warm Ground Grid
-      const grid = new THREE.GridHelper(60, 30, 0x332c25, 0x1f1b17);
+      // Clean Light Ground Grid
+      const grid = new THREE.GridHelper(60, 30, 0xd9d2c5, 0xeee9df);
       grid.position.y = -0.05;
       scene.add(grid);
 
-      // Boundary Envelope Box (30m max height) in Emerald Green
+      // Cadastral Sanctioned Box Boundary in Clean Green
       const boundaryGeo = new THREE.BoxGeometry(18, 30, 18);
       const boundaryEdges = new THREE.EdgesGeometry(boundaryGeo);
       const boundaryMat = new THREE.LineDashedMaterial({
-        color: 0x10b981,
+        color: 0x166534,
         dashSize: 1.2,
         gapSize: 0.8,
         linewidth: 2,
@@ -852,14 +833,14 @@
       boundaryBox.position.set(0, 15, 0);
       scene.add(boundaryBox);
 
-      // Group
+      // Building Group
       buildingGroup = new THREE.Group();
       scene.add(buildingGroup);
 
-      // Laser Scanner Beam (Crimson / Terracotta)
+      // Laser Scanner Beam (Red)
       const scanGeo = new THREE.PlaneGeometry(28, 28);
       const scanMat = new THREE.MeshBasicMaterial({
-        color: 0xef4444,
+        color: 0xdc2626,
         transparent: true,
         opacity: 0,
         side: THREE.DoubleSide
@@ -936,9 +917,9 @@
       const floorW = 15;
       const floorD = 15;
 
-      // Base Podium in warm stone
+      // Base Podium in clean light stone
       const baseGeo = new THREE.BoxGeometry(floorW + 2, 0.8, floorD + 2);
-      const baseMat = new THREE.MeshStandardMaterial({ color: 0x2b2520, roughness: 0.85 });
+      const baseMat = new THREE.MeshStandardMaterial({ color: 0xded8ce, roughness: 0.85 });
       const baseMesh = new THREE.Mesh(baseGeo, baseMat);
       baseMesh.position.y = 0.4;
       buildingGroup.add(baseMesh);
@@ -952,20 +933,20 @@
 
         if (isIllegal && highlightViolation) {
           floorMat = new THREE.MeshStandardMaterial({
-            color: 0xef4444,
+            color: 0xdc2626,
             roughness: 0.3,
             metalness: 0.1,
             emissive: 0x991b1b,
-            emissiveIntensity: 0.7,
+            emissiveIntensity: 0.65,
             transparent: true,
             opacity: 0.95
           });
         } else if (isIllegal && !highlightViolation) {
-          floorMat = new THREE.MeshStandardMaterial({ color: 0xf87171, roughness: 0.5 });
+          floorMat = new THREE.MeshStandardMaterial({ color: 0xfca5a5, roughness: 0.5 });
         } else {
-          // Warm architectural concrete
+          // Clean architectural white/cream walls
           floorMat = new THREE.MeshStandardMaterial({
-            color: f % 2 === 0 ? 0xfbf8f3 : 0xede6dc,
+            color: f % 2 === 0 ? 0xffffff : 0xf6f3ec,
             roughness: 0.4,
             metalness: 0.05
           });
@@ -979,21 +960,21 @@
         // Floor slab
         const slabGeo = new THREE.BoxGeometry(floorW + 0.6, 0.25, floorD + 0.6);
         const slabMat = new THREE.MeshStandardMaterial({
-          color: isIllegal && highlightViolation ? 0x991b1b : 0x3d352e,
+          color: isIllegal && highlightViolation ? 0x991b1b : 0xcbc4b7,
           roughness: 0.9
         });
         const slabMesh = new THREE.Mesh(slabGeo, slabMat);
         slabMesh.position.set(0, 0.8 + f * floorH - 0.125, 0);
         buildingGroup.add(slabMesh);
 
-        // Glass windows with warm bronze reflection (No cyan/blue)
+        // Glass windows with clean warm reflective tint (No blue)
         const glassGeo = new THREE.BoxGeometry(floorW + 0.05, floorH * 0.4, floorD + 0.05);
         const glassMat = new THREE.MeshStandardMaterial({
-          color: isIllegal && highlightViolation ? 0xfca5a5 : 0xfde68a,
+          color: isIllegal && highlightViolation ? 0xfca5a5 : 0xfef08a,
           roughness: 0.15,
-          metalness: 0.75,
+          metalness: 0.6,
           transparent: true,
-          opacity: 0.75
+          opacity: 0.6
         });
         const glassMesh = new THREE.Mesh(glassGeo, glassMat);
         glassMesh.position.set(0, posY, 0);
@@ -1032,10 +1013,10 @@
         const btn = document.getElementById(`step-btn-${s}`);
         const panel = document.getElementById(`step-panel-${s}`);
         if (s === step) {
-          btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-500 text-[#141210] shadow-sm cursor-pointer';
+          btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-[#166534] text-white shadow-2xs cursor-pointer';
           panel.classList.remove('hidden');
         } else {
-          btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-white cursor-pointer';
+          btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:text-[#1a1714] cursor-pointer';
           panel.classList.add('hidden');
         }
       }
@@ -1050,7 +1031,7 @@
       if (step === 1) {
         legendViol.classList.add('hidden');
         prevBtn.disabled = true;
-        prevBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl border border-[#332c25] bg-stone-900/60 text-stone-600 cursor-not-allowed';
+        prevBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl border border-[#ded8cb] bg-[#faf8f5] text-[#a89f91] cursor-not-allowed';
         nextBtn.innerHTML = 'Next Step →';
         nextBtn.onclick = nextStep;
         isScanning = false;
@@ -1059,14 +1040,14 @@
       } else if (step === 2) {
         legendViol.classList.remove('hidden');
         prevBtn.disabled = false;
-        prevBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl border border-stone-700 bg-stone-800 text-stone-200 hover:bg-stone-700 cursor-pointer';
+        prevBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl border border-[#ded8cb] bg-white text-[#4a433d] hover:bg-[#faf8f5] cursor-pointer shadow-2xs';
         nextBtn.innerHTML = 'Next Step →';
         nextBtn.onclick = nextStep;
         renderBuilding(12, true);
         triggerLaserScan();
       } else if (step === 3) {
         prevBtn.disabled = false;
-        prevBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl border border-stone-700 bg-stone-800 text-stone-200 hover:bg-stone-700 cursor-pointer';
+        prevBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl border border-[#ded8cb] bg-white text-[#4a433d] hover:bg-[#faf8f5] cursor-pointer shadow-2xs';
         nextBtn.innerHTML = '↺ Replay Step 1';
         nextBtn.onclick = () => setStep(1);
         selectTimeline(currentTimelineIdx);
@@ -1088,9 +1069,9 @@
       for (let i = 0; i < 5; i++) {
         const btn = document.getElementById(`t-btn-${i}`);
         if (i === idx) {
-          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-500 text-[#141210] cursor-pointer';
+          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all bg-[#166534] text-white cursor-pointer shadow-2xs';
         } else {
-          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-white cursor-pointer';
+          btn.className = 'py-1.5 rounded-lg text-xs font-bold transition-all text-[#6b6257] hover:bg-[#efece4] cursor-pointer';
         }
       }
 
@@ -1100,22 +1081,22 @@
       card.innerHTML = `
         <div class="flex items-start justify-between gap-2">
           <div>
-            <span class="text-[10px] font-mono text-stone-400 block">${ev.date}</span>
-            <h4 class="font-bold text-sm text-white mt-0.5">${ev.title}</h4>
+            <span class="text-[10px] font-mono text-[#786f65] block">${ev.date}</span>
+            <h4 class="font-bold text-sm text-[#1a1714] mt-0.5">${ev.title}</h4>
           </div>
-          <span class="px-2 py-0.5 text-[10px] font-bold rounded-full border ${ev.badgeColor}">
+          <span class="px-2 py-0.5 text-[10px] font-bold rounded-full ${ev.badgeColor}">
             ${ev.badge}
           </span>
         </div>
-        <p class="text-xs text-stone-300 leading-relaxed">${ev.desc}</p>
+        <p class="text-xs text-[#5c534a] leading-relaxed">${ev.desc}</p>
         <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
-          <div class="p-2 rounded-lg bg-[#141210] border border-[#2d2823]">
-            <span class="text-stone-400 block text-[10px]">Physical State:</span>
-            <strong class="text-white">${ev.floors} Floors Built</strong>
+          <div class="p-2 rounded-lg bg-white border border-[#ded8cb]">
+            <span class="text-[#786f65] block text-[10px]">Physical State:</span>
+            <strong class="text-[#1a1714]">${ev.floors} Floors Built</strong>
           </div>
-          <div class="p-2 rounded-lg bg-[#141210] border border-[#2d2823]">
-            <span class="text-stone-400 block text-[10px]">Audit Status:</span>
-            <strong class="${ev.hasViolation ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}">
+          <div class="p-2 rounded-lg bg-white border border-[#ded8cb]">
+            <span class="text-[#786f65] block text-[10px]">Audit Status:</span>
+            <strong class="${ev.hasViolation ? 'text-[#dc2626] font-bold' : 'text-[#166534] font-bold'}">
               ${ev.hasViolation ? 'Violation Logged' : '100% Compliant'}
             </strong>
           </div>
@@ -1165,12 +1146,12 @@
         marker.on('click', () => { selectBuilding(b); });
 
         marker.bindPopup(`
-          <div class="p-1 space-y-1 text-xs text-[#141210]">
+          <div class="p-1 space-y-1 text-xs text-[#1a1714]">
             <strong class="font-bold text-sm block">${b.name}</strong>
-            <span class="text-[11px] text-stone-600 block">${b.area} • ULPIN: <code class="font-mono text-[10px]">${b.baseUlpin}</code></span>
+            <span class="text-[11px] text-[#5c534a] block">${b.area} • ULPIN: <code class="font-mono text-[10px]">${b.baseUlpin}</code></span>
             <div class="pt-1 flex items-center justify-between">
-              <span class="font-bold text-emerald-800">${b.statusLabel}</span>
-              <a href="#interactive-prototype" onclick="selectBuilding('${b.id}')" class="text-xs font-bold text-amber-700 underline">Inspect 3D ➔</a>
+              <span class="font-bold text-[#166534]">${b.statusLabel}</span>
+              <a href="#interactive-prototype" onclick="selectBuilding('${b.id}')" class="text-xs font-bold text-[#166534] underline">Inspect 3D ➔</a>
             </div>
           </div>
         `);
@@ -1188,8 +1169,8 @@
         const item = document.createElement('div');
         item.className = `p-3 rounded-xl border transition-all cursor-pointer ${
           isSelected 
-            ? 'bg-[#211d18] border-amber-500/80 shadow-md ring-1 ring-amber-500/40' 
-            : 'bg-[#1c1915] border-[#332c25] hover:bg-[#25201a]'
+            ? 'bg-white border-[#166534] shadow-xs ring-1 ring-[#166534]/30' 
+            : 'bg-white border-[#ded8cb] hover:bg-[#fbfaf8]'
         }`;
 
         item.onclick = () => selectBuilding(b);
@@ -1197,11 +1178,11 @@
         item.innerHTML = `
           <div class="flex items-start justify-between gap-2">
             <div>
-              <span class="text-[10px] font-bold text-stone-400 block">${b.area}</span>
-              <h4 class="font-bold text-sm text-white">${b.name}</h4>
-              <span class="text-[11px] font-mono text-amber-400 block mt-0.5">${b.baseUlpin}</span>
+              <span class="text-[10px] font-bold text-[#786f65] block">${b.area}</span>
+              <h4 class="font-bold text-sm text-[#1a1714]">${b.name}</h4>
+              <span class="text-[11px] font-mono text-[#166534] font-medium block mt-0.5">${b.baseUlpin}</span>
             </div>
-            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full border ${b.badgeColor}">
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full ${b.badgeColor}">
               ${b.statusLabel}
             </span>
           </div>
@@ -1232,7 +1213,7 @@
 
       const badge = document.getElementById('banner-status-badge');
       badge.textContent = b.statusLabel;
-      badge.className = `px-2 py-0.5 text-[10px] font-bold rounded-full border ${b.badgeColor}`;
+      badge.className = `px-2 py-0.5 text-[10px] font-bold rounded-full ${b.badgeColor}`;
     }
 
     function launch3DFromMap() {
